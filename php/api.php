@@ -9,14 +9,16 @@ switch ($op) {
 		include("autentica-sesion.php");
 		$cod_usuario=isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";	
 		$password=isset($_POST['password'])?$_POST['password']:"NULL";
+		$response= array();
 		if (usuario_existente($db_user,$cod_usuario)) {
 			if (passCorrecto($db_user,$cod_usuario,$password)) {
-				echo "correcto";
+			    array_push($response, array("cod_usuario"=>$cod_usuario,"password"=>$password));
+				echo json_encode(array("server_response"=>$response));
 			}else{
-				echo "contraseña erronea";
+				echo json_encode(array("server_response"=>$response));
 			}
 		}else{
-			echo "usuario no existe";
+			echo json_encode(array("server_response"=>$response));
 		}
 	break;
 	//ejecuta insserts
