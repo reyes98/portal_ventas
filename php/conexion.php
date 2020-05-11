@@ -7,12 +7,7 @@ class  Db{
   private $password =""; 
   //
 
-  // //uso web
-  // private $servidor ="localhost";
-  // private $bd_ruta ="softneos_portal_ventas";
-  // private $user ="softneos_portal_ventas";
-  // private $password ="usb1234";  
-  // //
+
   public $conexion;
 
   public function __construct(){
