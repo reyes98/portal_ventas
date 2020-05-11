@@ -51,6 +51,15 @@ class  Db{
   	return false;
   }
 
+    //BUSCAR
+  public function buscar_parm($campos, $tabla, $condicion){
+    $resultado = $this->conexion->query("SELECT $campos FROM $tabla WHERE $condicion") or die($this->conexion->error);
+    if($resultado){
+      return $resultado->fetch_all(MYSQLI_ASSOC);
+    }
+    return false;
+  }
+
     //DESCONECTARSE
   public function desconectarse(){
     mysqli_close($this->conexion);

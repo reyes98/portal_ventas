@@ -6,20 +6,24 @@ $db_user = new  Db();
 switch ($op) {
 	//ejecuta inicio
 	case 'inicio':
-		include("autentica-sesion.php");
-		$cod_usuario=isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";	
-		$password=isset($_POST['password'])?$_POST['password']:"NULL";
-		$response= array();
-		if (usuario_existente($db_user,$cod_usuario)) {
-			if (passCorrecto($db_user,$cod_usuario,$password)) {
-			    array_push($response, array("cod_usuario"=>$cod_usuario,"password"=>$password));
-				echo json_encode(array("server_response"=>$response));
-			}else{
-				echo json_encode(array("server_response"=>$response));
-			}
+	include("autentica-sesion.php");
+	$cod_usuario=isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";	
+	$password=isset($_POST['password'])?$_POST['password']:"NULL";
+	$response= array();
+	if (usuario_existente($db_user,$cod_usuario)) {
+		if (passCorrecto($db_user,$cod_usuario,$password)) {
+			array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"inicio de sesion correcto"));
+			echo json_encode(array("server_response"=>$response));
 		}else{
+			array_push($response, array("estado"=>"Clave incorrecta"));
 			echo json_encode(array("server_response"=>$response));
 		}
+	}else{
+		array_push($response, array("estado"=>"usuario '$cod_usuario' no existe"));
+		echo json_encode(array("server_response"=>$response));
+	}
+
+	exit();
 	break;
 	//ejecuta insserts
 	case 'insert':
@@ -28,7 +32,8 @@ switch ($op) {
 	//crear usuario
 	if($fun=="crear_usuario"){
 		include('autentica-sesion.php');
-		$cod_usuario=isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";	
+		$cod_usuario=isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
+		$response= array();	
 		if (!usuario_existente($db_user, $cod_usuario)) {
 			$password=isset($_POST['password'])?$_POST['password']:"NULL";
 			if (validar_clave($password)) {
@@ -48,15 +53,15 @@ switch ($op) {
 				$valores= "'$cod_usuario', '$tipo_id', '$identificacion', '$nombre', '$direccion', '$tel_fijo', '$tel_movil', '$email', '$hash', '$estado', '$eps', '$foto', now(), NULL, NULL ";				
 
 				if(crear_usuario($db_user, $valores)){
-					echo "Usuario creado exitoamente";
+					array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"usuario creado"));
 				}else{
-					echo "No se pudo registar el usuario $cod_usuario :(";
+					array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"usuario no creado"));
 				}
-				exit();
-				
+				echo json_encode(array("server_response"=>$response));							
 			}			
 		}else{
-			echo "El usuario '$cod_usuario' ya existe :(";
+			array_push($response, array("estado"=>"usuario no creado"));
+			echo json_encode(array("server_response"=>$response));
 		}		
 		exit();
 	}
@@ -75,17 +80,44 @@ switch ($op) {
 		$info_tecnica = isset($_POST['info_tecnica'])?$_POST['info_tecnica']:"NULL";
 		
 		$valores= " '$cod_producto', '$cod_usuario', '$descripcion', '$cod_barras', '$categoria', $precio, $peso, $unidad, '$marca', '$modelo', '$info_tecnica', 'A', now(), NULL";
-		
+		$response= array();
 		if (insertar_producto($db_user,$valores)) {
-			echo "El producto $cod_producto ha sido guardado en tu lista de productos";
+			array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' ha sido agregado"));
 		}else{
-			echo "No se pudo guardar el producto $cod_producto en tu lista";
+			array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"producto '$cod_producto' no se pudo agregar"));
 		}
+		echo json_encode(array("server_response"=>$response));
+		exit();
 	}
 	break;
 	//-------------------------------------------------------------------
 	//ejecuta select
 	case 'select':
+	include("consultas.php");
+	if ($fun=="lista_productos") {
+		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
+		$valores="cod_usuario = '$cod_usuario'";		
+		$cod_producto = isset($_POST['cod_producto'])?$_POST['cod_producto']:"NULL";
+		$descripcion = isset($_POST['descripcion'])?$_POST['descripcion']:"NULL";
+		$cod_barras = isset($_POST['cod_barras'])?$_POST['cod_barras']:"NULL";
+		$categoria = isset($_POST['categoria'])?$_POST['categoria']:"NULL";
+		$marca = isset($_POST['marca'])?$_POST['marca']:"NULL";
+		if ($cod_producto!="NULL") {$valores.=" AND cod_producto = '$cod_producto'";}		
+		if ($descripcion!="NULL") {$valores.=" AND descripcion = '$descripcion'";}		
+		if ($cod_barras!="NULL") {$valores.=" AND cod_barras = '$cod_barras'";}		
+		if ($categoria!="NULL") {$valores.=" AND categoria = $categoria";}		
+		if ($marca!="NULL") {$valores.=" AND marca = '$marca'";}
+		
+		$resultado = consultar_productos($db_user, $valores);
+		$response = array();
+		
+		foreach ($resultado as $key => $value) {
+			array_push($response, array($key => $value));				
+		}
+		
+		echo json_encode(array("server_response"=>$response));		
+		exit();
+	}
 
 	break;
 	//ejecuta update
@@ -98,4 +130,5 @@ switch ($op) {
 	break;
 	
 }
+exit();
 ?>

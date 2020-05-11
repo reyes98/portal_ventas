@@ -1,34 +1,14 @@
 <?php
 
-function crear_usuario($db_user, $valores){  
-  $resultado = $db_user->insertar('usuarios',$valores);
+function consultar_productos($db_user, $valores){   
+  $campos = " p.grabo, u.nombre, p.cod_prodcuto, p.descripcion, p.precio, p.peso, p.marca ";
+  $tablas = " productos as p
+  INNER JOIN usuarios as u on u.cod_usuario = p.grabo ";
+  $resultado = $db_user->buscar_parm($campos,$tablas,$valores);
   $db_user->desconectarse();
   return $resultado;
 }
 
-function asignar_rol($db_user, $cod_usuario, $rol){
-  $resultado = $db_user->insertar('roles_usuario', $rol);
-  $db_user->desconectarse();
-  return $resultado;
-}
-
-function insertar_producto($db_user, $valores){
-  $resultado = $db_user->insertar('productos', $valores);
-  $db_user->desconectarse();
-  return $resultado;
-}
-
-function insertar_remision($db_user, $valores){
-  $resultado = $db_user->insertar('remisiones', $valores);
-  $db_user->desconectarse();
-  return $resultado;
-}
-
-function insertar_detalle_remision($db_user, $valores){
-  $resultado = $db_user->insertar('remisiones_d', $valores);
-  $db_user->desconectarse();
-  return $resultado;
-}
 
 
 ?>

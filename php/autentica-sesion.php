@@ -39,12 +39,10 @@ function passCorrecto($db_user, $cod_usuario, $passw){
 }
 
 function validar_clave($clave){
-  if(strlen($clave) < 6){
-    echo "La clave debe tener al menos 6 caracteres";
+  if(strlen($clave) < 6){    
     return false;
   }
-  if(strlen($clave) > 20){
-    echo "La clave no puede tener más de 16 caracteres";
+  if(strlen($clave) > 20){    
     return false;
   }
   /*if (!preg_match('[a-z]',$clave)){
