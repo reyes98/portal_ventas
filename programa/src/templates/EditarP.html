@@ -1,0 +1,51 @@
+{% extends "Base.html" %} {% block content %}
+<div class="form-group">
+    {%for info in (infoP)%}
+    <div class="form-group">
+        <label for="full_name_id" class="control-label">{{info}}</label>
+    </div>
+    {%endfor%}
+
+</div>
+<form action="/Editproduct" method="POST">
+
+    <div class="form-group">
+        <!-- Full Name -->
+        <label for="full_name_id" class="control-label">Nombre Producto</label>
+        <input type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <!-- Street 1 -->
+        <label for="street1_id" class="control-label">categoria: </label>
+        <input type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <!-- Street 2 -->
+        <label for="street2_id" class="control-label">precio:</label>
+        <input type="text" class="form-control">
+    </div>
+
+    <div class="form-group">
+        <!-- City-->
+        <label for="city_id" class="control-label">peso:</label>
+        <input type="text" class="form-control">
+    </div>
+    <div class="form-group">
+        <!-- Full Name -->
+        <label for="full_name_id" class="control-label">modelo:</label>
+        <input type="text" class="form-control">
+    </div>
+    <div class="form-group">
+        <!-- Full Name -->
+        <label for="full_name_id" class="control-label">info_tecnica:</label>
+        <input type="text" class="form-control">
+    </div>
+
+
+    <div class="form-group">
+        <!-- Submit Button -->
+        <button type="submit" class="btn btn-primary" name="editarP" type="submit" value="edit">Editar</button>
+    </div>
+    {% endblock %}

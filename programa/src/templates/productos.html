@@ -1,0 +1,36 @@
+{% extends "Base.html" %} {% block content %}
+
+<body>
+
+    <div>
+        <table class="table table-borderless">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col">#</th>
+                    {% for k in (cabecera)%}
+                    <th scope="col">{{k}}</th>
+                    {% endfor%}
+
+                </tr>
+            </thead>
+            <tbody>
+                {%for columnas in (datos0)%}
+                <tr>
+                    <form action="#" method="POST">
+                        {%for info in (columnas)%}
+                        <th scope="col">{{info}}</th>
+                        <!-- El evaluaR DE LOS BOTNOTES ES INFO[0]:EL CUAL DEVE SER EL identificador id del producto -->
+                        <th><button class="btn btn-outline-success my-2 my-sm-0" name="editar" type="submit" value="{{info[0]}}">editar</button></th>
+                        <th><button class="btn btn-outline-success my-2 my-sm-0" name="ver" type="submit" value="{{info[0]}}">Ver Detalle</button></th>
+
+                        {%endif%}
+
+                    </form>
+                </tr>
+                {%endfor%}
+            </tbody>
+        </table>
+
+    </div>
+</body>
+{% endblock %}
