@@ -9,6 +9,12 @@ function consultar_productos($db_user, $valores){
   return $resultado;
 }
 
+function ver_producto($db_user, $valores){   
+  $resultado = $db_user->buscar("productos",$valores);
+  $db_user->desconectarse();
+  return $resultado;
+}
+
 
 
 ?>

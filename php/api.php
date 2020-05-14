@@ -119,6 +119,23 @@ switch ($op) {
 		exit();
 	}
 
+	//ver la información de un producto
+	if ($fun=="ver_producto") {
+		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
+		$cod_producto = isset($_POST['cod_producto'])?$_POST['cod_producto']:"NULL";
+		$valores="grabo = '$cod_usuario' AND cod_producto = '$cod_producto'";		
+		
+		$resultado = ver_producto($db_user, $valores);
+		$response = array();
+		
+		foreach ($resultado as $key => $value) {
+			array_push($response, array($key => $value));				
+		}
+		
+		echo json_encode(array("server_response"=>$response));		
+		exit();
+	}
+
 	break;
 	//ejecuta update
 	case 'update':
