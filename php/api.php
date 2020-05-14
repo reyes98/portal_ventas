@@ -12,14 +12,14 @@ switch ($op) {
 	$response= array();
 	if (usuario_existente($db_user,$cod_usuario)) {
 		if (passCorrecto($db_user,$cod_usuario,$password)) {
-			array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"inicio de sesion correcto"));
+			array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"1","msj"=>"inicio de sesion correcto"));
 			echo json_encode(array("server_response"=>$response));
 		}else{
-			array_push($response, array("estado"=>"Clave incorrecta"));
+			array_push($response, array("estado"=>"0","msj"=>"Clave incorrecta"));
 			echo json_encode(array("server_response"=>$response));
 		}
 	}else{
-		array_push($response, array("estado"=>"usuario '$cod_usuario' no existe"));
+		array_push($response, array("estado"=>"0","msj"=>"usuario '$cod_usuario' no existe"));
 		echo json_encode(array("server_response"=>$response));
 	}
 
@@ -53,14 +53,14 @@ switch ($op) {
 				$valores= "'$cod_usuario', '$tipo_id', '$identificacion', '$nombre', '$direccion', '$tel_fijo', '$tel_movil', '$email', '$hash', '$estado', '$eps', '$foto', now(), NULL, NULL ";				
 
 				if(crear_usuario($db_user, $valores)){
-					array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"usuario creado"));
+					array_push($response, array("estado"=>"1","cod_usuario"=>$cod_usuario,"msj"=>"usuario creado"));
 				}else{
-					array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"usuario no creado"));
+					array_push($response, array("estado"=>"0","cod_usuario"=>$cod_usuario,"msj"=>"usuario no creado"));
 				}
 				echo json_encode(array("server_response"=>$response));							
 			}			
 		}else{
-			array_push($response, array("estado"=>"usuario no creado"));
+			array_push($response, array("estado"=>"0","msj"=>"usuario no creado"));
 			echo json_encode(array("server_response"=>$response));
 		}		
 		exit();
@@ -82,9 +82,9 @@ switch ($op) {
 		$valores= " '$cod_producto', '$cod_usuario', '$descripcion', '$cod_barras', '$categoria', $precio, $peso, $unidad, '$marca', '$modelo', '$info_tecnica', 'A', now(), NULL";
 		$response= array();
 		if (insertar_producto($db_user,$valores)) {
-			array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' ha sido agregado"));
+			array_push($response, array("estado"=>"1","cod_producto"=>$cod_producto,"msj"=>"el producto '$cod_producto' ha sido agregado"));
 		}else{
-			array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"producto '$cod_producto' no se pudo agregar"));
+			array_push($response, array("estado"=>"0","cod_producto"=>$cod_producto,"msj"=>"producto '$cod_producto' no se pudo agregar"));
 		}
 		echo json_encode(array("server_response"=>$response));
 		exit();
@@ -150,12 +150,12 @@ switch ($op) {
 			if ($info_tecnica!="NULL") {$campos['info_tecnica'] = " info_tecnica = '$info_tecnica'";}
 			$campos['fecha_modificacion'] = " fecha_modificacion = now()";
 			if (actualizar_producto($db_user,$campos, $cod_producto, $cod_usuario)) {
-				array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' ha sido actualizado"));
+				array_push($response, array("estado"=>"1","cod_producto"=>$cod_producto,"msj"=>"el producto '$cod_producto' ha sido actualizado"));
 			}else{
-				array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' no se pudo actualizar"));
+				array_push($response, array("estado"=>"0","cod_producto"=>$cod_producto,"msj"=>"el producto '$cod_producto' no se pudo actualizar"));
 			}
 		}else{
-			array_push($response, array("estado"=>"tienes que especificar el producto a actualizar"));
+			array_push($response, array("estado"=>"0","msj"=>"tienes que especificar el producto a actualizar"));
 		}	
 		
 		echo json_encode(array("server_response"=>$response));
@@ -173,12 +173,12 @@ switch ($op) {
 		$response= array();
 		if ($cod_producto!="NULL") {			
 			if (eliminar_producto($db_user,$cod_producto, $cod_usuario)) {
-				array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' ha sido eliminado"));
+				array_push($response, array("estado"=>"1","cod_producto"=>$cod_producto,"msj"=>"el producto '$cod_producto' ha sido eliminado"));
 			}else{
-				array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' no se pudo eliminar"));
+				array_push($response, array("estado"=>"0","cod_producto"=>$cod_producto,"msj"=>"el producto '$cod_producto' no se pudo eliminar"));
 			}
 		}else{
-			array_push($response, array("estado"=>"tienes que especificar el producto a elminar"));
+			array_push($response, array("estado"=>"0","msj"=>"tienes que especificar el producto a elminar"));
 		}	
 		
 		echo json_encode(array("server_response"=>$response));
