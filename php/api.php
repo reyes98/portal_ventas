@@ -122,10 +122,68 @@ switch ($op) {
 	break;
 	//ejecuta update
 	case 'update':
+	include("update.php");
+	//actualiza producto
+	if ($fun=="actualizar_producto") {
+		$cod_producto = isset($_POST['cod_producto'])?$_POST['cod_producto']:"NULL";
+		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
+		$descripcion = isset($_POST['descripcion'])?$_POST['descripcion']:"NULL";
+		$cod_barras = isset($_POST['cod_barras'])?$_POST['cod_barras']:"NULL";
+		$categoria = isset($_POST['categoria'])?$_POST['categoria']:"NULL";
+		$precio = isset($_POST['precio'])?$_POST['precio']:"NULL";
+		$peso = isset($_POST['peso'])?$_POST['peso']:"NULL";
+		$unidad = isset($_POST['unidad'])?$_POST['unidad']:"NULL";
+		$marca = isset($_POST['marca'])?$_POST['marca']:"NULL";
+		$modelo = isset($_POST['modelo'])?$_POST['modelo']:"NULL";
+		$info_tecnica = isset($_POST['info_tecnica'])?$_POST['info_tecnica']:"NULL";
+		$campos = array();
+		$response= array();
+		if ($cod_producto!="NULL") {
+			if ($descripcion!="NULL") {$campos['descripcion'] = " descripcion = '$descripcion'";}		
+			if ($cod_barras!="NULL") {$campos['cod_barras'] = " cod_barras = '$cod_barras'";}		
+			if ($categoria!="NULL") {$campos['categoria'] = " categoria = '$categoria'";}	
+			if ($precio!="NULL") {$campos['precio'] = " precio = '$precio'";}
+			if ($peso!="NULL") {$campos['peso'] = " peso = '$peso'";}
+			if ($unidad!="NULL") {$campos['unidad'] = " unidad = '$unidad'";}
+			if ($marca!="NULL") {$campos['marca'] = " marca = '$marca'";}
+			if ($modelo!="NULL") {$campos['modelo'] = " modelo = '$modelo'";}
+			if ($info_tecnica!="NULL") {$campos['info_tecnica'] = " info_tecnica = '$info_tecnica'";}
+			$campos['fecha_modificacion'] = " fecha_modificacion = now()";
+			if (actualizar_producto($db_user,$campos, $cod_producto, $cod_usuario)) {
+				array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' ha sido actualizado"));
+			}else{
+				array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' no se pudo actualizar"));
+			}
+		}else{
+			array_push($response, array("estado"=>"tienes que especificar el producto a actualizar"));
+		}	
+		
+		echo json_encode(array("server_response"=>$response));
+		exit();
+	}
 
 	break;
 	//ejecuta delete
 	case 'delete':
+	include("delete.php");
+	if ($fun=="eliminar_producto") {
+		$cod_producto = isset($_POST['cod_producto'])?$_POST['cod_producto']:"NULL";
+		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
+		
+		$response= array();
+		if ($cod_producto!="NULL") {			
+			if (eliminar_producto($db_user,$cod_producto, $cod_usuario)) {
+				array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' ha sido eliminado"));
+			}else{
+				array_push($response, array("cod_producto"=>$cod_producto,"estado"=>"el producto '$cod_producto' no se pudo eliminar"));
+			}
+		}else{
+			array_push($response, array("estado"=>"tienes que especificar el producto a elminar"));
+		}	
+		
+		echo json_encode(array("server_response"=>$response));
+		exit();
+	}
 
 	break;
 	

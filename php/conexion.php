@@ -25,14 +25,14 @@ class  Db{
   } 
     //BORRAR
   public function borrar($tabla, $condicion){    
-  	$resultado  =   $this->conexion->query("DELETE FROM $tabla WHERE $condicion") or die($this->conexion->error);
+  	$resultado  =   $this->conexion->query("DELETE FROM $tabla WHERE $condicion;") or die($this->conexion->error);
   	if($resultado)
   		return true;
   	return false;
   }
     //ACTUALIZAR
   public function actualizar($tabla, $campos, $condicion){    
-  	$resultado  =   $this->conexion->query("UPDATE $tabla SET $campos WHERE $condicion") or die($this->conexion->error);
+  	$resultado  =   $this->conexion->query("UPDATE $tabla SET $campos WHERE $condicion;") or die($this->conexion->error);
   	if($resultado)
   		return true;
   	return false;        
