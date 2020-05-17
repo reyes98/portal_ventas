@@ -20,10 +20,32 @@ def home():
  
         if consulticas.login(request.form['login'],request.form['password']) == True:
             RunSession(request.form['login'],request.form['password'])
-            return render_template("vacio.html")
+            return redirect(url_for('consultarProductos'))
         else:
             print('nonas')
             return render_template("login.html")
+
+
+@app.route('/consultProductos',methods=['GET','POST'])
+def consultarProductos():
+    listaTem=list()
+    if request.values.get('buscador'):
+        listaTem.append(request.values.get('buscador'))
+    if request.values.get('opcion'):
+        listaTem.append(request.values.get('opcion'))
+    if request.values.get('select'):
+        listaTem.append(request.values.get('select'))
+       
+    print(listaTem)
+    consulticas = SqlCons.Consultas()
+    dicionario = consulticas.convertirListaToDict(listaTem)
+    datosBase = consulticas.consultarProductos(dicionario)
+    print(dicionario, " -- >" , datosBase)
+   
+    return render_template("consultarProductos.html")
+
+
+
 
 @app.route('/Editproduct',methods=['GET', 'POST'])
 def EditarProductos():

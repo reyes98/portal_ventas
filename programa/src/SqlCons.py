@@ -117,7 +117,6 @@ class Consultas():
         # columnas=[ ['id','prodcuto1',valor1,'detalles','etc'],['id','prodcuto2',valor,'detalles','etc']    ]
         pass
     def login(self,user,passw):
-        
         resp = self.htp.request(
         'POST',
         self.url+'?op=inicio',
@@ -131,8 +130,22 @@ class Consultas():
             return True
         else:
             return False
-    
 
-#prueba = Consultas()
+    def consultarProductos(self,diccionario):
+        
+        resp = self.htp.request(
+        'POST',
+        self.url+'?op=select&fun=lista_productos',
+        fields=diccionario)
+        
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)
+        return obj
 
-#print(prueba.login('jsreyes','27069811'))
+
+    def convertirListaToDict(self,lista):
+        diccionario={lista[1]:lista[0]}
+        return diccionario
+prueba = Consultas()
+
+#prueba.consultarProducto(2)

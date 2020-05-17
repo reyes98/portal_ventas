@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+
+{% block content %}
+<form action="/consultProductos" method="POST">
+    <label>Buscar</label>
+    <input type="text" id="login" class="fadeIn second" name="buscador" placeholder="Barra de busquedad">
+
+    <input type="radio" id="male" name="opcion" value="cod_producto">
+    <label for="male">ID producto</label><br>
+    <input type="radio" id="female" name="opcion" value="cod_usuario">
+    <label for="female">ID cliente</label><br>
+    <input type="radio" id="female" name="opcion" value="descripcion">
+    <label for="female">Nombre del producto </label><br>
+    <input type="radio" id="female" name="opcion" value="marca">
+    <label for="female">Marca </label><br>
+
+
+    <label>Categoria</label>
+    <select name="select">
+        <option value="1" > 1</option> 
+        <option value="2" > 2</option>
+        <option value="3" > 3</option>
+    </select>
+
+    <input type="submit" class="fadeIn fourth" value="Log In">
+</form>
+
+<div class="content-table"> 
+    <h3> Los carros de la empresa </h3>
+    <table class ="table-fill">
+        <tr> 
+            <th>PLACA</th>
+            <th>MODELO</th>
+            <th>MARCA</th>
+            <th>CILINDRAJE</th>
+            <th>ESTADO</th>    
+       </tr>    
+            {% for i in lista_carros %}
+            <tr>
+            {% for j in i %}
+            
+                    <td>{{j}}</td>
+            
+            {% endfor %}
+            </tr>
+            {% endfor %}
+           
+    </table>        
+     
+</div>
+
+
+
+{% endblock %}
