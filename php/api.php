@@ -96,18 +96,18 @@ switch ($op) {
 	include("consultas.php");
 	if ($fun=="lista_productos") {
 		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
-		$valores="cod_usuario = '$cod_usuario'";		
+		$valores="precio > 1";		
 		$cod_producto = isset($_POST['cod_producto'])?$_POST['cod_producto']:"NULL";
 		$descripcion = isset($_POST['descripcion'])?$_POST['descripcion']:"NULL";
 		$cod_barras = isset($_POST['cod_barras'])?$_POST['cod_barras']:"NULL";
 		$categoria = isset($_POST['categoria'])?$_POST['categoria']:"NULL";
 		$marca = isset($_POST['marca'])?$_POST['marca']:"NULL";
-		if ($cod_producto!="NULL") {$valores.=" AND cod_producto = '$cod_producto'";}		
-		if ($descripcion!="NULL") {$valores.=" AND descripcion = '$descripcion'";}		
-		if ($cod_barras!="NULL") {$valores.=" AND cod_barras = '$cod_barras'";}		
+		if ($cod_usuario!="NULL") {$valores.=" AND grabo ='$cod_usuario'";}
+		if ($cod_producto!="NULL") {$valores.=" AND cod_producto like '%$cod_producto%'";}		
+		if ($descripcion!="NULL") {$valores.=" AND descripcion like '%$descripcion%'";}		
+		if ($cod_barras!="NULL") {$valores.=" AND cod_barras ='$cod_barras'";}		
 		if ($categoria!="NULL") {$valores.=" AND categoria = $categoria";}		
-		if ($marca!="NULL") {$valores.=" AND marca = '$marca'";}
-		
+		if ($marca!="NULL") {$valores.=" AND marca like '%$marca%'";}		
 		$resultado = consultar_productos($db_user, $valores);
 		$response = array();
 		
