@@ -1,4 +1,4 @@
-from flask import Flask
+#from flask import Flask
 #consejo esta url ponla como constante
 #url local: localhost/portal_ventas/php/api.php 
 
@@ -93,9 +93,16 @@ from flask import Flask
 #retorna: {"server_response":[{"estado":"1","cod_producto":"PR-4","msj":"el producto 'PR-4' ha sido eliminado"}]}
 # 
 #------------------------------------------
+import urllib3
+import json
+##conexión con el URL
 
 
 class Consultas():
+    def __init__(self):
+        self.htp= urllib3.PoolManager()
+        self.url='http://localhost/portal_ventas/php/api.php'
+
     def detallePro(self,nombre):
         ##Sacar todos los detalles POR NOMBRE   ordenas los values() en detalles
         detalles=list()
@@ -110,15 +117,22 @@ class Consultas():
         # columnas=[ ['id','prodcuto1',valor1,'detalles','etc'],['id','prodcuto2',valor,'detalles','etc']    ]
         pass
     def login(self,user,passw):
-        #url : localhost/portal_ventas/php/api.php?op=inicio
-        #se envia por post cod_usuario,password
-        #respuesta del servido será un diccionario
-        # se llama el servivio para reconocer si el ususario es verididco
-        #se espera que la respuesta sea en terminaos de binario 1 = si existe 0= NO existe 
-        # La respuesta no flittra si eiste error de ususario o contraseña, solo estipula si se encuntra o no los datos ingrresaddos
         
-        result=1
-        if result==1:
+        resp = self.htp.request(
+        'POST',
+        self.url+'?op=inicio',
+        fields={'cod_usuario': user,
+            'password': passw
+            })
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']
+        # obj[0] en posicion 0 se refiere al primer registro que tiene el json 
+        if obj[0]['estado']=='1':
             return True
         else:
             return False
+    
+
+#prueba = Consultas()
+
+#print(prueba.login('jsreyes','27069811'))

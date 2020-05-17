@@ -1,7 +1,6 @@
 from flask import Flask,session, g, render_template,redirect, url_for, request,session ,escape, redirect,jsonify
 
-
-from SqlCons import * 
+import SqlCons
 import os
 
 
@@ -17,11 +16,11 @@ def home():
         else:
             return render_template("login.html")
     if request.method =="POST":
-        consulta=Consultas()
+        consulticas = SqlCons.Consultas()
  
-        if consulta.login(request.form['user'],request.form['contra']):
-            RunSession(request.form['user'],request.form['contra'])
-            return redirect(url_for('tablaM'))
+        if consulticas.login(request.form['login'],request.form['password']) == True:
+            RunSession(request.form['login'],request.form['password'])
+            return render_template("vacio.html")
         else:
             print('nonas')
             return render_template("login.html")
@@ -68,6 +67,7 @@ def admin():
     if request.method =="POST":
          return render_template("productos.html")
     return render_template("admin.html")
+    
 @app.route('/Registrar',methods=['GET', 'POST'])
 def addUsu():
     if request.method =="POST":
