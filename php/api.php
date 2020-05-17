@@ -1,6 +1,8 @@
 <?php 
+//operacion
 $op=isset($_GET["op"])?$_GET["op"]:NULL;
 $fun=isset($_GET["fun"])?$_GET["fun"]:NULL;
+
 include('conexion.php');
 $db_user = new  Db();
 switch ($op) {
