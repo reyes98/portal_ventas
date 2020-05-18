@@ -139,13 +139,39 @@ class Consultas():
         fields=diccionario)
         
         datos= resp.data.decode('UTF-8')
-        obj = json.loads(datos)
+        obj = json.loads(datos)['server_response']
         return obj
 
 
     def convertirListaToDict(self,lista):
         diccionario={lista[1]:lista[0]}
         return diccionario
-prueba = Consultas()
+
+
+    def convertirListaNormal(self,lista):
+        lista_de_listas = list()
+        
+        for i in range(len(lista)):
+           
+            for j in lista[i]:
+                resultado=list()
+                if i==0:
+                    resultado=self.valoresdicionario(lista[i][0])
+                else:
+                    resultado=self.valoresdicionario(lista[i][j])
+                lista_de_listas.append(resultado)
+
+        return lista_de_listas
+         
+    def valoresdicionario(self,dicc):
+        regist_temp=list()
+        for registro in dicc.values():
+            regist_temp.append(registro)
+        return regist_temp
+    
+
+#prueba = Consultas()
+#datos=[[{'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-1', 'descripcion': 'Doritos', 'precio': '2000', 'peso': '0.058', 'marca': 'fritolay'}], {'1': {'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-2', 'descripcion': 'Paquetón doritos', 'precio': '8000', 'peso': '0.326', 'marca': 'fritolay'}}, {'2': {'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-3', 'descripcion': 'gaseosa', 'precio': '3', 'peso': '150', 'marca': 'Cocacola'}}]
+#print(prueba.convertirListaNormal(datos))
 
 #prueba.consultarProducto(2)

@@ -2,10 +2,17 @@
 
 
 {% block content %}
+
+{% if listado %}
+
+{{ listado }}
+
+{% endif %}
+
 <form action="/consultProductos" method="POST">
     <label>Buscar</label>
     <input type="text" id="login" class="fadeIn second" name="buscador" placeholder="Barra de busquedad">
-
+    <br></br>
     <input type="radio" id="male" name="opcion" value="cod_producto">
     <label for="male">ID producto</label><br>
     <input type="radio" id="female" name="opcion" value="cod_usuario">
@@ -15,7 +22,7 @@
     <input type="radio" id="female" name="opcion" value="marca">
     <label for="female">Marca </label><br>
 
-
+  
     <label>Categoria</label>
     <select name="select">
         <option value="1" > 1</option> 
@@ -23,29 +30,39 @@
         <option value="3" > 3</option>
     </select>
 
-    <input type="submit" class="fadeIn fourth" value="Log In">
+    <input type="submit" class="fadeIn fourth" value="Buscar">
 </form>
 
 <div class="content-table"> 
-    <h3> Los carros de la empresa </h3>
+    <h3> Productos </h3>
     <table class ="table-fill">
         <tr> 
-            <th>PLACA</th>
-            <th>MODELO</th>
+            <th>COD PRODUCTO</th>
+            <th>DESCRIPCION</th>
+            <th>PRECIO</th>
+            <th>PESO</th>
             <th>MARCA</th>
-            <th>CILINDRAJE</th>
-            <th>ESTADO</th>    
+            <th>OPCION</th>    
        </tr>    
-            {% for i in lista_carros %}
-            <tr>
-            {% for j in i %}
+       {% for dato_producto in listado %}
+       <tr>
+           <td> {{ dato_producto.2 }} </td> 
+           <td> {{ dato_producto.3 }} </td> 
+           <td> {{ dato_producto.4 }} </td> 
+           <td> {{ dato_producto.5 }} </td> 
+           <td> {{ dato_producto.6 }} </td> 
+        
             
-                    <td>{{j}}</td>
-            
-            {% endfor %}
-            </tr>
-            {% endfor %}
-           
+           <td class="opciones"> 
+               <a href="" class="btn_editar" > Editar</a>
+               <a href="" class="btn_detalle" >  Detalle </a>
+
+           </td>
+        
+          
+       </tr>
+       {% endfor %} 
+
     </table>        
      
 </div>

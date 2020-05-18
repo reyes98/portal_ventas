@@ -35,13 +35,16 @@ def consultarProductos():
         listaTem.append(request.values.get('opcion'))
     if request.values.get('select'):
         listaTem.append(request.values.get('select'))
-       
-    print(listaTem)
-    consulticas = SqlCons.Consultas()
-    dicionario = consulticas.convertirListaToDict(listaTem)
-    datosBase = consulticas.consultarProductos(dicionario)
-    print(dicionario, " -- >" , datosBase)
    
+    if len(listaTem)>0:
+        consulticas = SqlCons.Consultas()
+        dicionario = consulticas.convertirListaToDict(listaTem)
+        datosBase = consulticas.consultarProductos(dicionario)
+        #print(dicionario, " -- >" , datosBase)
+        resultado= consulticas.convertirListaNormal(datosBase)
+        #print(resultado)
+        return render_template("consultarProductos.html",listado=resultado)
+
     return render_template("consultarProductos.html")
 
 
