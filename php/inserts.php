@@ -18,17 +18,29 @@ function insertar_producto($db_user, $valores){
   return $resultado;
 }
 
-function insertar_remision($db_user, $valores){
-  $resultado = $db_user->insertar('remisiones', $valores);
+function insertar_factura($db_user, $campos,$valores){
+  $res_f = $db_user->insertar("facturas".$campos, $valores);  
+  return $res_f;
+}
+function insertar_factura_d($db_user, $valores){
+  $res_f = $db_user->insertar("facturas_d".$campos, $valores);
   $db_user->desconectarse();
-  return $resultado;
+  return $res_f;
 }
 
-function insertar_detalle_remision($db_user, $valores){
-  $resultado = $db_user->insertar('remisiones_d', $valores);
+
+
+function insertar_pedido($db_user, $campos,$valores,$prods){
+  $res_f = $db_user->insertar("pedidos".$campos, $valores);
+  if ($res_f) {
+  
+  }
+  //$resultado = $db_user->insertar('pedidos', $valores);
   $db_user->desconectarse();
-  return $resultado;
+  return $res_f;
 }
+
+
 
 
 ?>

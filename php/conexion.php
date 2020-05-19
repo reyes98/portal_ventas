@@ -15,6 +15,11 @@ class  Db{
   	or die(mysql_error());
   	$this->conexion->set_charset("utf8");
   }
+
+    //Last ID
+  public function last_id(){
+    return $this->conexion->insert_id;
+  }
     //INSERTAR
   public function insertar($tabla, $datos){
   	$resultado = $this->conexion->query("INSERT INTO $tabla VALUES ($datos)") or die($this->conexion->error);
@@ -22,7 +27,7 @@ class  Db{
   	if($resultado)
   		return true;
   	return false;
-  } 
+  }
     //BORRAR
   public function borrar($tabla, $condicion){    
   	$resultado  =   $this->conexion->query("DELETE FROM $tabla WHERE $condicion;") or die($this->conexion->error);
