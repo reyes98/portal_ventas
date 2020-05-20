@@ -6,17 +6,17 @@
     <link rel="stylesheet" href="../static/consultarProductos.css">
 </head>
 <div class="cabecera">
-    <form action="/consultProductos" method="POST">
+    <form action="/consultProductos" method="POST" class="form-inline my-2 my-lg-0">
         <div class="sub">
-            <form class="form-inline my-2 my-lg-0">
+            <div class="form-inline my-2 my-lg-0"> 
                 <label>Buscar</label>
-                <input class="form-control mr-sm-2" type="search" name="buscador" placeholder="Barra de busquedad" aria-label="Search">
+                <input class="form-control mr-sm-2" type="search" name="buscador" placeholder="" aria-label="Search">
 
-            </form>
+            </div>
         </div>
         <br></br>
         <input type="radio" id="male" name="opcion" value="cod_producto">
-        <label for="male">ID producto</label><br>
+        <label for="male">ID producto </label><br>
         <input type="radio" id="female" name="opcion" value="cod_usuario">
         <label for="female">ID cliente</label><br>
         <input type="radio" id="female" name="opcion" value="descripcion">
@@ -63,9 +63,16 @@
 
 
                 <td class="opciones">
-                    <a href="" class="btn_editar"> Editar</a>
+                    {% if session['rol'] == 1 %} <!-- Cliente -->
+                    <a href="/updateProducto/{{dato_producto.2}}" class="btn_editar"> Agregar al carrito</a>
                     <a href="" class="btn_detalle">  Detalle </a>
+                    
 
+                    {% elif session['rol'] == 2 %} <!-- Vendedor-->
+                    <a href="/updateProducto/{{dato_producto.2}}" class="btn_editar"> Editar</a>
+                    <a href="" class="btn_detalle">  Anular </a>
+                    <a href="" class="btn_detalle">  Detalle </a>
+                    {% endif %}
                 </td>
 
 

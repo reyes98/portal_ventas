@@ -170,6 +170,11 @@ class Consultas():
         return regist_temp
     
 
+    def rol(self,user,passw):
+        rol=int()
+        rol=2
+        return rol
+
 #prueba = Consultas()
 #datos=[[{'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-1', 'descripcion': 'Doritos', 'precio': '2000', 'peso': '0.058', 'marca': 'fritolay'}], {'1': {'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-2', 'descripcion': 'Paquetón doritos', 'precio': '8000', 'peso': '0.326', 'marca': 'fritolay'}}, {'2': {'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-3', 'descripcion': 'gaseosa', 'precio': '3', 'peso': '150', 'marca': 'Cocacola'}}]
 #print(prueba.convertirListaNormal(datos))

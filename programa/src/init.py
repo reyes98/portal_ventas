@@ -1,6 +1,6 @@
 from flask import Flask,session, g, render_template,redirect, url_for, request,session ,escape, redirect,jsonify
 
-from SqlCons import *
+import SqlCons
 import os
 
 
@@ -20,7 +20,7 @@ def home():
  
         if consulticas.login(request.form['login'],request.form['password']) == True:
             RunSession(request.form['login'],request.form['password'])
-            
+            buscarRol
             return redirect(url_for('consultarProductos'))
         else:
             print('nonas')
@@ -29,6 +29,8 @@ def home():
 
 @app.route('/consultProductos',methods=['GET','POST'])
 def consultarProductos():
+
+
     listaTem=list()
     if request.values.get('buscador'):
         listaTem.append(request.values.get('buscador'))
@@ -49,7 +51,15 @@ def consultarProductos():
     return render_template("consultarProductos.html")
 
 
+@app.route('/updateProducto/<string:id>',methods=['GET','POST'])
+def updateProducto(id):
+    return render_template("updateProducto.html",ides=id)
 
+
+
+@app.route('/carritoCompras',methods=['GET','POST'])
+def carritoCompras():
+    return render_template("carritoCompra.html")
 
 @app.route('/Editproduct',methods=['GET', 'POST'])
 def EditarProductos():
@@ -106,11 +116,16 @@ def dropsession():
     #session.pop('user', None)
     return redirect(url_for('home'))
     
+def buscarRol(user,passw):
+    consul=SqlCons.Consultas()
+    resultado=consul.rol(user,passw)
+    return resultado
+
 def RunSession(user,passw):
-    print('inicia session')
+    print(buscarRol(user,passw))
     session['user'] = user  
     session['password']=passw 
-    
+    session['rol']=buscarRol(user,passw)
     
 if __name__=="__main__":
     app.run('0.0.0.0', 5000, debug=True)
