@@ -34,10 +34,10 @@ def consultarProductos():
     listaTem=list()
     if request.values.get('buscador'):
         listaTem.append(request.values.get('buscador'))
-    if request.values.get('opcion'):
-        listaTem.append(request.values.get('opcion'))
-    if request.values.get('select'):
-        listaTem.append(request.values.get('select'))
+    if request.values.get('selectSearch'):
+        listaTem.append(request.values.get('selectSearch'))
+    if request.values.get('selectCategory'):
+        listaTem.append(request.values.get('selectCategory'))
    
     if len(listaTem)>0:
         consulticas = SqlCons.Consultas()
