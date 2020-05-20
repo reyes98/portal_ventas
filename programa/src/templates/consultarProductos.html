@@ -15,23 +15,28 @@
             </div>
         </div>
         <br></br>
-        <input type="radio" id="male" name="opcion" value="cod_producto">
-        <label for="male">ID producto </label><br>
-        <input type="radio" id="female" name="opcion" value="cod_usuario">
-        <label for="female">ID cliente</label><br>
-        <input type="radio" id="female" name="opcion" value="descripcion">
-        <label for="female">Nombre del producto </label><br>
-        <input type="radio" id="female" name="opcion" value="marca">
-        <label for="female">Marca </label><br>
+ 
+        <div class="sub1">
+            <div class="form-group">
+            <label for="exampleFormControlSelect1">Buscar por </label>
+            <select class="form-control" id="exampleFormControlSelect1" name="selectSearch">
+            <option value="cod_producto" > ID producto</option> 
+            <option value="cod_usuario" > ID cliente</option>
+            <option value="descripcion" > Nombre del producto</option>
+            <option value="marca" > Marca</option>
+            </select>
+            </div>
+        </div>
+
 
         <div class="sub1">
             <div class="form-group">
-                <label for="exampleFormControlSelect1">Categoria</label>
-                <select class="form-control" id="exampleFormControlSelect1" name="select">
+            <label for="exampleFormControlSelect1">Categoria</label>
+            <select class="form-control" id="exampleFormControlSelect1" name="selectCategory">
             <option value="1" > 1</option> 
             <option value="2" > 2</option>
             <option value="3" > 3</option>
-        </select>
+            </select>
             </div>
         </div>
         <input type="submit" class="btn btn-secondary" class="fadeIn fourth" value="Buscar">
