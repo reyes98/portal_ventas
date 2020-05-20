@@ -1,6 +1,6 @@
 from flask import Flask,session, g, render_template,redirect, url_for, request,session ,escape, redirect,jsonify
 
-import SqlCons
+from SqlCons import *
 import os
 
 
@@ -20,6 +20,7 @@ def home():
  
         if consulticas.login(request.form['login'],request.form['password']) == True:
             RunSession(request.form['login'],request.form['password'])
+            
             return redirect(url_for('consultarProductos'))
         else:
             print('nonas')
@@ -61,7 +62,7 @@ def EditarProductos():
 
 @app.route('/Verproduct',methods=['GET', 'POST'])
 def VerProductos():
-    consulta=Consultas()
+    consulta= Consultas()
     consulta.detallePro('nombre')
     NombreP='Producto # 1'
     detalles=['Nombre1','ip_producto2','descripcion3','cod_barras4','catoria5']
@@ -102,7 +103,7 @@ def addUsu():
 @app.route("/ses-Cls-hhm", methods=['GET','POST'])
 def dropsession():
     print('cerrar')
-    session.pop('user', None)
+    #session.pop('user', None)
     return redirect(url_for('home'))
     
 def RunSession(user,passw):

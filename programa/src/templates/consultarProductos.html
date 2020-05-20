@@ -1,66 +1,79 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
 
 
-{% block content %}
 
- 
+<head>
+    <link rel="stylesheet" href="../static/consultarProductos.css">
+</head>
+<div class="cabecera">
+    <form action="/consultProductos" method="POST">
+        <div class="sub">
+            <form class="form-inline my-2 my-lg-0">
+                <label>Buscar</label>
+                <input class="form-control mr-sm-2" type="search" name="buscador" placeholder="Barra de busquedad" aria-label="Search">
 
-<form action="/consultProductos" method="POST">
-    <label>Buscar</label>
-    <input type="text" id="login" class="fadeIn second" name="buscador" placeholder="Barra de busquedad">
-    <br></br>
-    <input type="radio" id="male" name="opcion" value="cod_producto">
-    <label for="male">ID producto</label><br>
-    <input type="radio" id="female" name="opcion" value="cod_usuario">
-    <label for="female">ID cliente</label><br>
-    <input type="radio" id="female" name="opcion" value="descripcion">
-    <label for="female">Nombre del producto </label><br>
-    <input type="radio" id="female" name="opcion" value="marca">
-    <label for="female">Marca </label><br>
+            </form>
+        </div>
+        <br></br>
+        <input type="radio" id="male" name="opcion" value="cod_producto">
+        <label for="male">ID producto</label><br>
+        <input type="radio" id="female" name="opcion" value="cod_usuario">
+        <label for="female">ID cliente</label><br>
+        <input type="radio" id="female" name="opcion" value="descripcion">
+        <label for="female">Nombre del producto </label><br>
+        <input type="radio" id="female" name="opcion" value="marca">
+        <label for="female">Marca </label><br>
 
-  
-    <label>Categoria</label>
-    <select name="select">
-        <option value="1" > 1</option> 
-        <option value="2" > 2</option>
-        <option value="3" > 3</option>
-    </select>
+        <div class="sub1">
+            <div class="form-group">
+                <label for="exampleFormControlSelect1">Categoria</label>
+                <select class="form-control" id="exampleFormControlSelect1" name="select">
+            <option value="1" > 1</option> 
+            <option value="2" > 2</option>
+            <option value="3" > 3</option>
+        </select>
+            </div>
+        </div>
+        <input type="submit" class="btn btn-secondary" class="fadeIn fourth" value="Buscar">
 
-    <input type="submit" class="fadeIn fourth" value="Buscar">
-</form>
+    </form>
 
-<div class="content-table"> 
+</div>
+<div class="content-table">
     <h3> Productos </h3>
-    <table class ="table-fill">
-        <tr> 
-            <th>COD PRODUCTO</th>
-            <th>DESCRIPCION</th>
-            <th>PRECIO</th>
-            <th>PESO</th>
-            <th>MARCA</th>
-            <th>OPCION</th>    
-       </tr>    
-       {% for dato_producto in listado %}
-       <tr>
-           <td> {{ dato_producto.2 }} </td> 
-           <td> {{ dato_producto.3 }} </td> 
-           <td> {{ dato_producto.4 }} </td> 
-           <td> {{ dato_producto.5 }} </td> 
-           <td> {{ dato_producto.6 }} </td> 
-        
-            
-           <td class="opciones"> 
-               <a href="" class="btn_editar" > Editar</a>
-               <a href="" class="btn_detalle" >  Detalle </a>
+    <table class="table table-borderless">
+        <thead class="thead-dark">
+            <tr>
+                <th scope="col">COD PRODUCTO</th>
+                <th scope="col">DESCRIPCION</th>
+                <th scope="col">PRECIO</th>
+                <th scope="col">PESO</th>
+                <th scope="col">MARCA</th>
+                <th scope="col">OPCION</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for dato_producto in listado %}
+            <tr>
+                <td scope="col"> {{ dato_producto.2 }} </td>
+                <td scope="col"> {{ dato_producto.3 }} </td>
+                <td scope="col"> {{ dato_producto.4 }} </td>
+                <td scope="col"> {{ dato_producto.5 }} </td>
+                <td scope="col"> {{ dato_producto.6 }} </td>
 
-           </td>
-        
-          
-       </tr>
-       {% endfor %} 
 
-    </table>        
-     
+                <td class="opciones">
+                    <a href="" class="btn_editar"> Editar</a>
+                    <a href="" class="btn_detalle">  Detalle </a>
+
+                </td>
+
+
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
 </div>
 
 
