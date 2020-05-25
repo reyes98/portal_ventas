@@ -93,105 +93,152 @@ switch ($op) {
 		exit();
 	}
 
-	//Nuevo pedido
-	if ($fun=="nuevo_pedido") {
-		$campos ="(cliente";		
-		$cliente = isset($_POST['cliente'])?$_POST['cliente']:"NULL";
-		$valores="'$cliente'";		
-		$subtotal = isset($_POST['subtotal'])?$_POST['subtotal']:"NULL";
-		if ($subtotal != "NULL"){
-			$valores.= ", '$subtotal'";
-			$campos.=", subtotal";
-		} 
-
-		$valor_domicilio = isset($_POST['valor_domicilio'])?$_POST['valor_domicilio']:"NULL";
-		if ($valor_domicilio != "NULL"){
-			$valores.= ", '$valor_domicilio'";
-			$campos.=", valor_domicilio";
-		}
-
-		$total = isset($_POST['total'])?$_POST['total']:"NULL";
-		if ($total != "NULL"){
-			$valores.= ", '$total'";
-			$campos.=", total";
-		}
-
-		$direccion = isset($_POST['direccion'])?$_POST['direccion']:"NULL";
-		if ($direccion != "NULL"){
-			$valores.= ", '$direccion'";
-			$campos.=", direccion";
-		}
-
-		$tel_fijo = isset($_POST['tel_fijo'])?$_POST['tel_fijo']:"NULL";
-		if ($tel_fijo != "NULL"){
-			$valores.= ", '$tel_fijo'";
-			$campos.=", tel_fijo";
-		}
-
-		$tel_movil = isset($_POST['tel_movil'])?$_POST['tel_movil']:"NULL";
-		if ($tel_movil != "NULL"){
-			$valores.= ", '$tel_movil'";
-			$campos.=", tel_movil";
-		}
-
-		$email = isset($_POST['email'])?$_POST['email']:"NULL";
-		if ($email != "NULL"){
-			$valores.= ", '$email'";
-			$campos.=", email";
-		}
-
+	//agregar al carrito
+	if ($fun=="agregar_al_carrito") {
+		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
 		$vendedor = isset($_POST['vendedor'])?$_POST['vendedor']:"NULL";
-		if ($vendedor != "NULL"){
-			$valores.= ", '$vendedor'";
-			$campos.=", vendedor";
-		}
-
-		$observaciones = isset($_POST['observaciones'])?$_POST['observaciones']:"NULL";
-		if ($observaciones != "NULL"){
-			$valores.= ", '$observaciones'";
-			$campos.=", observaciones";
-		}
-
-		$vehiculo = isset($_POST['vehiculo'])?$_POST['vehiculo']:"NULL";
-		if ($vehiculo != "NULL"){
-			$valores.= ", '$vehiculo'";
-			$campos.=", vehiculo";
-		}
-
-		$domicilio = isset($_POST['domicilio'])?$_POST['domicilio']:"NULL";
-		if ($domicilio != "NULL"){
-			$valores.= ", '$domicilio'";
-			$campos.=", domicilio";
-		}
-
-		$firma = isset($_POST['firma'])?$_POST['firma']:"NULL";		
-		if ($firma != "NULL"){
-			$valores.= ", '$firma'";
-			$campos.=", firma";
-		}
-
-		$nombre_firma = isset($_POST['nombre_firma'])?$_POST['nombre_firma']:"NULL";
-		if ($nombre_firma != "NULL"){
-			$valores.= ", '$nombre_firma'";
-			$campos.=", nombre_firma";
-		}
-		$valores.=", now()";
-		$campos.=", fecha_alta)";		
-		$response= array();
-		if (insertar_factura($db_user, $campos, $valores)) {
-			$fac = $db_user->last_id();
-			// if (insertar_factura_d($db_user, $prods)) {
-				
-			//}
-			
-			array_push($response, array("estado"=>"1","msj"=>"Pedido completado","fac"=>$fac));
+		$producto = isset($_POST['producto'])?$_POST['producto']:"NULL";
+		$cantidad = isset($_POST['cantidad'])?$_POST['cantidad']:"NULL";		
+		$valores="null, '$cod_usuario', '$vendedor', '$producto', $cantidad, CURRENT_TIMESTAMP() ";
+		$response=array();
+		if (insertar_al_carrito($db_user, $valores)) {
+			array_push($response, array("estado"=>"1","producto"=>$producto,"msj"=>"El producto '$producto' se agregó al carrito"));
 		}else{
-			array_push($response, array("estado"=>"0","msj"=>"No se pudo agregar ese pedido"));
+			array_push($response, array("estado"=>"0","msj"=>"No se pudo agregar al carrito"));
 		}
+				
 		echo json_encode(array("server_response"=>$response));
 		exit();
+	}
 
+	//Nuevo pedido
+	if ($fun=="nuevo_pedido") {
+		$campos ="(cliente";
+		$carrito = array();
+		$carrito = isset($_POST['carrito'])?$_POST['carrito']:NULL;	
+		
+		if ($carrito) {			
+			$cliente = isset($_POST['cliente'])?$_POST['cliente']:"NULL";
+			$valores="'$cliente'";		
+			$subtotal = isset($_POST['subtotal'])?$_POST['subtotal']:"NULL";
+			if ($subtotal != "NULL"){
+				$valores.= ", '$subtotal'";
+				$campos.=", subtotal";
+			} 
 
+			$valor_domicilio = isset($_POST['valor_domicilio'])?$_POST['valor_domicilio']:"NULL";
+			if ($valor_domicilio != "NULL"){
+				$valores.= ", '$valor_domicilio'";
+				$campos.=", valor_domicilio";
+			}
+
+			$total = isset($_POST['total'])?$_POST['total']:"NULL";
+			if ($total != "NULL"){
+				$valores.= ", '$total'";
+				$campos.=", total";
+			}
+
+			$direccion = isset($_POST['direccion'])?$_POST['direccion']:"NULL";
+			if ($direccion != "NULL"){
+				$valores.= ", '$direccion'";
+				$campos.=", direccion";
+			}
+
+			$tel_fijo = isset($_POST['tel_fijo'])?$_POST['tel_fijo']:"NULL";
+			if ($tel_fijo != "NULL"){
+				$valores.= ", '$tel_fijo'";
+				$campos.=", tel_fijo";
+			}
+
+			$tel_movil = isset($_POST['tel_movil'])?$_POST['tel_movil']:"NULL";
+			if ($tel_movil != "NULL"){
+				$valores.= ", '$tel_movil'";
+				$campos.=", tel_movil";
+			}
+
+			$email = isset($_POST['email'])?$_POST['email']:"NULL";
+			if ($email != "NULL"){
+				$valores.= ", '$email'";
+				$campos.=", email";
+			}
+
+			$vendedor = isset($_POST['vendedor'])?$_POST['vendedor']:"NULL";
+			if ($vendedor != "NULL"){
+				$valores.= ", '$vendedor'";
+				$campos.=", vendedor";
+			}
+
+			$observaciones = isset($_POST['observaciones'])?$_POST['observaciones']:"NULL";
+			if ($observaciones != "NULL"){
+				$valores.= ", '$observaciones'";
+				$campos.=", observaciones";
+			}
+
+			$vehiculo = isset($_POST['vehiculo'])?$_POST['vehiculo']:"NULL";
+			if ($vehiculo != "NULL"){
+				$valores.= ", '$vehiculo'";
+				$campos.=", vehiculo";
+			}
+
+			$domicilio = isset($_POST['domicilio'])?$_POST['domicilio']:"NULL";
+			if ($domicilio != "NULL"){
+				$valores.= ", '$domicilio'";
+				$campos.=", domicilio";
+			}
+
+			$firma = isset($_POST['firma'])?$_POST['firma']:"NULL";		
+			if ($firma != "NULL"){
+				$valores.= ", '$firma'";
+				$campos.=", firma";
+			}
+
+			$nombre_firma = isset($_POST['nombre_firma'])?$_POST['nombre_firma']:"NULL";
+			if ($nombre_firma != "NULL"){
+				$valores.= ", '$nombre_firma'";
+				$campos.=", nombre_firma";
+			}
+			$valores.=", now()";
+			$campos.=", fecha_alta)";			
+
+			$response= array();
+			$db_user->iniciar_transaccion();
+			if (insertar_factura($db_user, $campos, $valores)) {
+				$fac = $db_user->last_id();
+				$rem= "NULL";
+				$detalle_f = "";
+				foreach ($carrito as $item => $arr) {
+					if ($detalle_f==""){
+						$detalle_f.= " ($fac ,$item";
+					}else{
+						$detalle_f.= ", ($fac, $item";
+					}
+					foreach ($arr as $key => $value) {				
+						$detalle_f.= ", '$value'"; 
+					}
+					$detalle_f.= ")"; 
+				}
+				
+				if (insertar_factura_d($db_user, $detalle_f)) {
+					if (insertar_pedido($db_user,"(cod_factura, cod_remision)", "$fac, $rem")) {
+						$db_user->commit();
+						$db_user->desconectarse();
+						array_push($response, array("estado"=>"1","msj"=>"Pedido completado","fac"=>$fac));
+					} else {
+						$db_user->rollback();
+						array_push($response, array("estado"=>"0","msj"=>"No se pudo agregar ese pedido"));
+					}					
+					
+				}else{
+					$db_user->rollback();
+					array_push($response, array("estado"=>"0","msj"=>"No se pudo agregar ese pedido"));
+				}				
+			}else{
+				$db_user->rollback();
+				array_push($response, array("estado"=>"0","msj"=>"No se pudo agregar ese pedido"));
+			}
+		}		
+		echo json_encode(array("server_response"=>$response));
+		exit();
 	}
 	break;
 	//-------------------------------------------------------------------

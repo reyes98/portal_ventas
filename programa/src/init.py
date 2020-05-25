@@ -106,10 +106,48 @@ def admin():
     
 @app.route('/Registrar',methods=['GET', 'POST'])
 def addUsu():
-    if request.method =="POST":
-         return render_template("registro.html")
-    return render_template("registro.html")
-#--------------------------------------
+    if request.method =="POST":     
+        print(
+            request.values.get('nombre'),'\n',
+        request.values.get('apellido'),'\n',
+        request.values.get('pass1'),'\n',
+        request.values.get('pass2'),'\n',
+        request.values.get('correo'),'\n',
+        request.values.get('movil'),'\n',
+        request.values.get('direccion'),'\n',
+        request.values.get('barrio'),'\n',
+        request.values.get('telefono'),'\n',
+        request.values.get('cedula')
+        )
+        if request.values.get('pass1')==request.values.get('pass2'):
+            #validar datos
+            consulticas = SqlCons.Consultas()
+            salida= consulticas.agregarusuario(
+                        request.values.get('nombre'),
+                        request.values.get('apellido'),
+                        request.values.get('pass1'),
+                        request.values.get('correo'),
+                        request.values.get('movil'),
+                        request.values.get('direccion'),
+                        request.values.get('barrio'),
+                        request.values.get('telefono'),
+                        request.values.get('cedula')
+                    )
+            if salida ==0:
+                # salida erronea
+                return render_template("registro.html",mensaje='Error; Usuario existente')
+            elif salida==1:
+                # salida correcta
+                return render_template("login.html")
+
+
+        else:
+            #cntraseñas no coinciden
+            return render_template("registro.html",mensaje='Error; contraseñas distintas')
+
+        
+        return render_template("registro.html")
+    return render_template("registro.html")#--------------------------------------
 @app.route("/ses-Cls-hhm", methods=['GET','POST'])
 def dropsession():
     print('cerrar')

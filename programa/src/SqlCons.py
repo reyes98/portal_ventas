@@ -163,6 +163,13 @@ class Consultas():
 
         return lista_de_listas
          
+    def agregarusuario(self,
+        nombre,apellido,pass1,correo,movil,direccion,barrio,telefono,cedula):
+        # poner cnsulta php para agregar
+        salida=1# aca se graba la salida del php
+        return salida
+        pass
+       
     def valoresdicionario(self,dicc):
         regist_temp=list()
         for registro in dicc.values():

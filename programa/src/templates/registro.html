@@ -15,16 +15,22 @@
         </div>
 
         <!-- Login Form -->
-        <form action="/" method="POST">
-            <input type="text" id="login" class="fadeIn second" name="nombre" placeholder="Nombre">
-            <input type="text" id="login" class="fadeIn second" name="apellido" placeholder="Apellidos">
-            <input type="text" id="login" class="fadeIn second" name="correo" placeholder="Correo">
-            <input type="text" id="login" class="fadeIn second" name="movil" placeholder="Movil">
-            <input type="text" id="login" class="fadeIn second" name="direccion" placeholder="direccion">
-            <input type="text" id="login" class="fadeIn second" name="barrio" placeholder="Barrio">
-            <input type="text" id="login" class="fadeIn second" name="telefono" placeholder="Telefono">
+        <form action="/Registrar" method="POST">
 
-            <input type="submit" class="fadeIn fourth" value="Log In">
+            <label for="">{{mensaje}}</label>
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="nombre" placeholder="Nombre">
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="apellido" placeholder="Apellidos">
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="cedula" placeholder="cedula">
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="correo" placeholder="Correo">
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="pass1" placeholder="contraseña">
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="pass2" placeholder="Repetir contraseña">
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="telefono" placeholder="Telefono">
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="movil" placeholder="Movil">
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="direccion" placeholder="direccion">
+            <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="barrio" placeholder="Barrio">
+
+
+            <input type="submit" class="fadeIn fourth" value="Registrarse">
         </form>
 
         <!-- Remind Passowrd -->

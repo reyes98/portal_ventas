@@ -20,6 +20,21 @@ class  Db{
   public function last_id(){
     return $this->conexion->insert_id;
   }
+    //COMMIT A LOS CAMBIOS
+  public function commit(){
+    return $this->conexion->commit();
+  }
+
+    //INICIA TRANSACCIÓN
+  public function iniciar_transaccion(){
+    return $this->conexion->begin_transaction();
+  }
+
+  //INICIA ROLLBACK
+  public function rollback(){
+    return $this->conexion->rollback();
+  }
+
     //INSERTAR
   public function insertar($tabla, $datos){
   	$resultado = $this->conexion->query("INSERT INTO $tabla VALUES ($datos)") or die($this->conexion->error);
@@ -27,6 +42,15 @@ class  Db{
   	if($resultado)
   		return true;
   	return false;
+  }
+
+    //INSERTAR
+  public function insertar_multiple($tabla, $datos){
+    $resultado = $this->conexion->query("INSERT INTO $tabla VALUES $datos;") or die($this->conexion->error);
+
+    if($resultado)
+      return true;
+    return false;
   }
     //BORRAR
   public function borrar($tabla, $condicion){    
