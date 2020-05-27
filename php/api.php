@@ -350,6 +350,7 @@ switch ($op) {
 	//ejecuta delete
 	case 'delete':
 	include("delete.php");
+	//elimina producto
 	if ($fun=="eliminar_producto") {
 		$cod_producto = isset($_POST['cod_producto'])?$_POST['cod_producto']:"NULL";
 		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
@@ -368,7 +369,49 @@ switch ($op) {
 		echo json_encode(array("server_response"=>$response));
 		exit();
 	}
+	//--------------------------------------
 
+	//elimina producto del carrito
+	if ($fun=="eliminar_del_carrito") {
+		$cod_producto = isset($_POST['cod_producto'])?$_POST['cod_producto']:"NULL";
+		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
+		$vendedor = isset($_POST['vendedor'])?$_POST['vendedor']:"NULL";
+		
+		$response= array();
+		if ($cod_producto!="NULL") {			
+			if (eliminar_producto_carrito($db_user,$cod_producto, $cod_usuario,$vendedor)) {
+				array_push($response, array("estado"=>"1","cod_producto"=>$cod_producto,"msj"=>"el producto '$cod_producto' ha sido eliminado"));
+			}else{
+				array_push($response, array("estado"=>"0","cod_producto"=>$cod_producto,"msj"=>"el producto '$cod_producto' no se pudo eliminar"));
+			}
+		}else{
+			array_push($response, array("estado"=>"0","msj"=>"tienes que especificar el producto a elminar"));
+		}	
+		
+		echo json_encode(array("server_response"=>$response));
+		exit();
+	}
+	//--------------------------------------
+
+	//elimina producto del carrito
+	if ($fun=="vaciar_carrito") {
+		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
+		
+		$response= array();
+		if ($cod_usuario!="NULL") {			
+			if (vaciar_carrito($db_user, $cod_usuario)) {
+				array_push($response, array("estado"=>"1","msj"=>"Carrito vaciado"));
+			}else{
+				array_push($response, array("estado"=>"0","msj"=>"no se pudo vaciar"));
+			}
+		}else{
+			array_push($response, array("estado"=>"0","msj"=>"tienes que el usuario"));
+		}	
+		
+		echo json_encode(array("server_response"=>$response));
+		exit();
+	}
+	//--------------------------------------
 	break;
 	
 }
