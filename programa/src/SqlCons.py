@@ -131,8 +131,7 @@ class Consultas():
         else:
             return False
 
-    def consultarProductos(self,diccionario):
-        
+    def consultarProductos(self,diccionario): 
         resp = self.htp.request(
         'POST',
         self.url+'?op=select&fun=lista_productos',
@@ -141,6 +140,23 @@ class Consultas():
         datos= resp.data.decode('UTF-8')
         obj = json.loads(datos)['server_response']
         return obj
+
+    # SENDING DATA POST URLLIB3
+    def registrarUsuario(self,cod_usuario,nombre,cedula,correo,password1,movil,direccion,eps,tipo_id)
+        http.request('POST', 'http://localhost:8080/assets',
+        headers={'Content-Type': 'application/json'},
+        body=({
+        "cod_usuario":cod_usuario,
+        "nombre": nombre,
+        "identificacion": cedula,
+        "correo": correo,
+        "password": password1,
+        "tel_movil":  movil,
+        "direccion": direccion,
+        "eps": eps,
+        "tipo_id": tipo_id
+        }))
+
 
 
     def convertirListaToDict(self,lista):

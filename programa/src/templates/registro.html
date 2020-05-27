@@ -12,10 +12,20 @@
 
         <!-- Icon -->
         <div class="fadeIn first">
+        
+            {% with mensaje=get_flashed_messages() %}
+            {% if mensaje %} 
+            {% for msj in mensaje %}
+                <p>  {{msj}}</p>
+                 
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
         </div>
 
         <!-- Login Form -->
-        <form action="/Registrar" method="POST">
+        <form action="/registrarUsuario" method="POST">
 
             <label for="">{{mensaje}}</label>
             <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="nombre" placeholder="Nombre">
@@ -28,8 +38,15 @@
             <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="movil" placeholder="Movil">
             <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="direccion" placeholder="direccion">
             <input type="text" id="login" minlength="5" maxlength="29" class="fadeIn second" name="barrio" placeholder="Barrio">
+            <div id="wrapper fadeInDown">
 
-
+            <label> Tipo de usuario</label>
+            <select class="custom-select custom-select-lg mb-3" name="selectTipo" >   
+                <option value="1" > CLIENTE</option> 
+                <option value="2" > VENDEDOR</option>
+                <option value="3" > DOMICILIARIO</option>
+            </select>
+            </div>
             <input type="submit" class="fadeIn fourth" value="Registrarse">
         </form>
 

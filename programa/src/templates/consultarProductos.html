@@ -55,6 +55,9 @@
                 <th scope="col">PESO</th>
                 <th scope="col">MARCA</th>
                 <th scope="col">OPCION</th>
+                {% if session['rol'] == 1 %} <!-- Cliente -->
+                <th scope="col"> CANTIDAD COMPRA</th>
+                {% endif %}
             </tr>
         </thead>
         <tbody>

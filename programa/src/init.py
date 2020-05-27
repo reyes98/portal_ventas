@@ -1,4 +1,4 @@
-from flask import Flask,session, g, render_template,redirect, url_for, request,session ,escape, redirect,jsonify
+from flask import Flask,session, g, render_template,redirect, url_for, request,session ,escape, redirect,jsonify,flash
 
 import SqlCons
 import os
@@ -10,27 +10,38 @@ app.secret_key = os.urandom(24)
 
 @app.route('/',methods=['GET', 'POST'])
 def home():
-    if request.method == 'GET':
-        if session ==None: 
-            session.pop('user', None)
-        else:
-            return render_template("login.html")
-    if request.method =="POST":
-        consulticas = SqlCons.Consultas()
- 
-        if consulticas.login(request.form['login'],request.form['password']) == True:
-            RunSession(request.form['login'],request.form['password'])
-            buscarRol
-            return redirect(url_for('consultarProductos'))
-        else:
-            print('nonas')
-            return render_template("login.html")
+    
+    ## SI ACCIONAS EL BOTON DE LOGIN
+    if request.args.getlist('btn-submit') == 'Login':        
+        return render_template("login.html")
+    ## SI ACCIONAS EL BOTON REGISTRAR
+    elif request.values.get('btn-submit') == 'Registrar':
+        return redirect(url_for('registrarUsuario'))
+    return render_template("login.html")
+
+@app.route('/registrarUsuario',methods=['GET','POST'])
+def registrarUsuario():
+    if request.method == 'POST':
+       nombre=request.form['nombre']
+       apellido=request.form['apellido']
+       cedula=request.form['cedula']
+       correo=request.form['correo']
+       password1=request.form['pass1']
+       password2=request.form['pass2']
+       telefono=request.form['telefono']
+       movil=request.form['movil']
+       direccion=request.form['direccion']
+       barrio=request.form['barrio']
+       tipo=request.form['selectTipo']
+    
+       lista=[nombre,apellido,cedula,correo,password1,password2,telefono,movil,direccion,barrio,tipo] 
+       flash(lista)
+
+    return render_template("registro.html")
 
 
 @app.route('/consultProductos',methods=['GET','POST'])
 def consultarProductos():
-
-
     listaTem=list()
     if request.values.get('buscador'):
         listaTem.append(request.values.get('buscador'))
