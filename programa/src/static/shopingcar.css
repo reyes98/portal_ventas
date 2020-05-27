@@ -1,0 +1,35 @@
+.cabe {
+    background-color: whitesmoke;
+    padding-top: 5%;
+    margin-left: 3%;
+    margin-right: 10%;
+    font: oblique bold 120% cursive;
+}
+
+.tabla {
+    padding: 1%;
+    background-color: #e5e7e9;
+}
+
+.tablaC {
+    background-color: whitesmoke;
+}
+
+.cabe1 {
+    background-color: whitesmoke;
+    margin-left: 3%;
+    margin-right: 3%;
+    display: flex;
+    padding: 1%;
+    font: oblique bold 120% cursive;
+}
+
+.See-1 {
+    width: 50%;
+}
+
+.See-2 {
+    width: 50%;
+    padding-left: 30%;
+    float: left;
+}

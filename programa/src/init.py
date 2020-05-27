@@ -148,6 +148,16 @@ def addUsu():
         
         return render_template("registro.html")
     return render_template("registro.html")#--------------------------------------
+
+@app.route("/CarritoCompra", methods=['GET','POST'])
+def Carrito():
+    print('Inicio Carrito')
+    cabecera=['Vendedor','Nombre','Descripcion','Precio','Cantidad','Total Parcial']
+    datos=[['Vendedor1','Nombre1','Descripcion1','$$$$$$$','###3','Total Parcial'],
+            ['Vendedor2','Nombre2','Descripcion2','$$$$$$$','####','Total Parcial'],
+            ['Vendedor3','Nombre3','Descripcion3','$$$$$$$','####','Total Parcial']]
+    return render_template("shopingcar.html",cabecera=cabecera,datos0=datos)
+
 @app.route("/ses-Cls-hhm", methods=['GET','POST'])
 def dropsession():
     print('cerrar')

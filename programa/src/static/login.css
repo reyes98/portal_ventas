@@ -29,6 +29,12 @@ h2 {
 
 /* STRUCTURE */
 
+.prb {
+    display: flex;
+    font: oblique bold 120% cursive;
+    float: left;
+}
+
 .wrapper {
     display: flex;
     align-items: center;
@@ -83,7 +89,7 @@ input[type=reset] {
     background-color: #56baed;
     border: none;
     color: white;
-    padding: 15px 80px;
+    padding: 15px 50px;
     text-align: center;
     text-decoration: none;
     display: inline-block;

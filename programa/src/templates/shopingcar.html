@@ -1,0 +1,70 @@
+{% extends "base.html" %} {% block content %}
+
+<head>
+    <link rel="stylesheet" href="../static/shopingcar.css">
+</head>
+
+<body>
+    <div class="cabe">
+        Carrito de compras
+    </div>
+    <div class="tabla">
+        <table class="table table-borderless">
+            <thead class="thead-dark">
+                <tr>
+
+                    {% for k in (cabecera)%}
+                    <th scope="col">{{k}}</th>
+                    {% endfor%}
+                    <th scope="col">Opciones</th>
+
+                </tr>
+            </thead>
+            <tbody class="tablaC">
+                {%for columnas in (datos0)%}
+                <tr>
+                    {%for info in (columnas)%}
+                    <td>
+                        {{info}}
+
+                    </td>{%endfor%}
+                    <th><button class="btn btn-danger" name="editar" type="submit" value="borrar">Borrar</button></th>
+                </tr>
+
+
+
+
+
+                {%endfor%}
+                <tr class="thead-light">
+                    <td scope="col"></td>
+                    <td scope="col"></td>
+                    <td scope="col"></td>
+                    <td scope="col"></td>
+                    <th scope="col">Total:</th>
+                    <td>$$$$$$$$$$$$$4</td>
+                    <td scope="col"></td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="cabe1">
+            <div class="See-1">
+                <form action="#" method="POST">
+                    <button class="btn btn-outline-secondary" name="editar" type="submit" value="borrar">Segir Comprando</button>
+                    <form action="#" method="POST">
+                        <button class="btn btn-danger" name="editar" type="submit" value="borrar">Vaciar Carrito</button>
+                    </form>
+                </form>
+
+
+
+            </div>
+            <div class="See-2">
+                <form action=" " method="POST">
+                    <button class="btn btn-success name=" type="submit " value="borrar ">Completar Pedido</button>
+                </form>
+            </div>
+        </div>
+</body>
+{% endblock %}
