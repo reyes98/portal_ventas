@@ -15,7 +15,7 @@ switch ($op) {
 	$response= array();
 	if (usuario_existente($db_user,$cod_usuario)) {
 		if (passCorrecto($db_user,$cod_usuario,$password)) {
-			array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"1","msj"=>"inicio de sesion correcto"));
+			array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"1","rol"=>$rol,"msj"=>"inicio de sesion correcto"));
 			echo json_encode(array("server_response"=>$response));
 		}else{
 			array_push($response, array("estado"=>"0","msj"=>"Clave incorrecta"));
@@ -53,7 +53,8 @@ switch ($op) {
 				$estado='A';
 				$eps=isset($_POST['eps'])?$_POST['eps']:"NULL";
 				$foto=isset($_POST['foto'])?$_POST['foto']:"NULL";
-				$valores= "'$cod_usuario', '$tipo_id', '$identificacion', '$nombre', '$direccion', '$tel_fijo', '$tel_movil', '$email', '$hash', '$estado', '$eps', '$foto', now(), NULL, NULL ";				
+				$rol = isset($_POST['rol'])?$_POST['rol']:"NULL";
+				$valores= "'$cod_usuario', '$tipo_id', '$identificacion', '$nombre', '$direccion', '$tel_fijo', '$tel_movil', '$email', '$hash', '$estado', '$eps', '$foto','$rol' , now(), NULL, NULL ";				
 
 				if(crear_usuario($db_user, $valores)){
 					array_push($response, array("estado"=>"1","cod_usuario"=>$cod_usuario,"msj"=>"usuario creado"));
