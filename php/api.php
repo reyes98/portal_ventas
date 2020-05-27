@@ -269,6 +269,7 @@ switch ($op) {
 		echo json_encode(array("server_response"=>$response));		
 		exit();
 	}
+	//_---------------------------------------------
 
 	//ver la información de un producto
 	if ($fun=="ver_producto") {
@@ -286,6 +287,21 @@ switch ($op) {
 		echo json_encode(array("server_response"=>$response));		
 		exit();
 	}
+
+	//consulta categorias de productos
+	if ($fun=="select_categoria") {
+		$response=array();
+		if($resultado=categorias($db_user)){
+			
+			echo json_encode(array("server_response"=>$resultado));
+					
+		}else{
+			echo json_encode(array("server_response"=>$response));
+		}
+		
+		exit();
+	}
+	//---------------------------------------------------
 
 	break;
 	//ejecuta update

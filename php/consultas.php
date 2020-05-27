@@ -15,6 +15,10 @@ function ver_producto($db_user, $valores){
 	return $resultado;
 }
 
+function categorias($db_user){
+	return $db_user->buscar("categoria_productos","1");
+}
+
 function ver_carrito($db_user, $valores){
 	$campos = "p.cod_producto, p.descripcion, c.cantidad*p.peso as peso, c.cantidad*p.precio as precio, p.marca";
 	$tablas = " carrito as c 
