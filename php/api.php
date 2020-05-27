@@ -14,7 +14,9 @@ switch ($op) {
 	$password=isset($_POST['password'])?$_POST['password']:"NULL";
 	$response= array();
 	if (usuario_existente($db_user,$cod_usuario)) {
-		if (passCorrecto($db_user,$cod_usuario,$password)) {
+		$resultado=passCorrecto($db_user,$cod_usuario,$password);
+		if ($resultado) {
+			$rol = $resultado[0]['rol'];
 			array_push($response, array("cod_usuario"=>$cod_usuario,"estado"=>"1","rol"=>$rol,"msj"=>"inicio de sesion correcto"));
 			echo json_encode(array("server_response"=>$response));
 		}else{

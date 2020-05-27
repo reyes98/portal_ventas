@@ -30,12 +30,14 @@ function usuario_existente($db_user, $cod_usuario){
 function passCorrecto($db_user, $cod_usuario, $passw){  
   $resultado = $db_user->buscar("usuarios","cod_usuario = '$cod_usuario'");
   $correcto=false;
-  if($resultado){
+  if($resultado){    
     $row = $resultado[0];
-    $correcto=password_verify($passw, $row['password']);    
+    $correcto=password_verify($passw, $row['password']);
+    if ($correcto) {
+      return $resultado;
+    }    
   }  
-  
-  return $correcto;
+  return null;  
 }
 
 function validar_clave($clave){
