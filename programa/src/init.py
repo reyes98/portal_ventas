@@ -3,6 +3,7 @@ from flask import Flask,session, g, render_template,redirect, url_for, request,s
 import SqlCons
 import os
 
+temporal=list()
 
 ##
 app= Flask(__name__)
@@ -10,10 +11,23 @@ app.secret_key = os.urandom(24)
 
 @app.route('/',methods=['GET', 'POST'])
 def home():
-    
     ## SI ACCIONAS EL BOTON DE LOGIN
-    if request.args.getlist('btn-submit') == 'Login':        
-        return render_template("login.html")
+    if request.values.get('btn-submit') == 'Login':        
+        if request.method == 'GET':
+            if session ==None: 
+                session.pop('user', None)
+            else:
+                return render_template("login.html")
+        if request.method =="POST":
+            consulticas = SqlCons.Consultas()
+
+            if consulticas.login(request.form['login'],request.form['password']) == True:
+                RunSession(request.form['login'],request.form['password'])
+                return redirect(url_for('consultarProductos'))
+            else:
+                print('nonas')
+                return render_template("login.html")
+        
     ## SI ACCIONAS EL BOTON REGISTRAR
     elif request.values.get('btn-submit') == 'Registrar':
         return redirect(url_for('registrarUsuario'))
@@ -22,44 +36,68 @@ def home():
 @app.route('/registrarUsuario',methods=['GET','POST'])
 def registrarUsuario():
     if request.method == 'POST':
+       cod_usuario=request.form['cod_usuario']
        nombre=request.form['nombre']
-       apellido=request.form['apellido']
        cedula=request.form['cedula']
        correo=request.form['correo']
        password1=request.form['pass1']
-       password2=request.form['pass2']
-       telefono=request.form['telefono']
        movil=request.form['movil']
        direccion=request.form['direccion']
-       barrio=request.form['barrio']
-       tipo=request.form['selectTipo']
-    
-       lista=[nombre,apellido,cedula,correo,password1,password2,telefono,movil,direccion,barrio,tipo] 
-       flash(lista)
+       eps=request.form['eps']
+       rol=request.form['selectTipo']
+       tipo_id=1
+       consulticas=SqlCons.Consultas()
+       resultado=consulticas.registrarUsuario(cod_usuario,nombre,cedula,rol,correo,password1,movil,direccion,eps,tipo_id)
+       
 
     return render_template("registro.html")
 
-
-@app.route('/consultProductos',methods=['GET','POST'])
+@app.route('/consultProductos/',methods=['GET','POST'])
 def consultarProductos():
-    listaTem=list()
-    if request.values.get('buscador'):
-        listaTem.append(request.values.get('buscador'))
-    if request.values.get('selectSearch'):
-        listaTem.append(request.values.get('selectSearch'))
-    if request.values.get('selectCategory'):
-        listaTem.append(request.values.get('selectCategory'))
-   
-    if len(listaTem)>0:
-        consulticas = SqlCons.Consultas()
-        dicionario = consulticas.convertirListaToDict(listaTem)
-        datosBase = consulticas.consultarProductos(dicionario)
-        #print(dicionario, " -- >" , datosBase)
-        resultado= consulticas.convertirListaNormal(datosBase)
-        #print(resultado)
-        return render_template("consultarProductos.html",listado=resultado)
+     
+    resultado=list()
+    if request.values.get('btn-submit')== 'buscar':
+        temporal.clear()
+        if request.form['buscador']:
+            temporal.append(request.form['buscador'])
+        if request.form['selectSearch']:
+            temporal.append(request.form['selectSearch'])
+        if request.form['selectCategory']:
+            temporal.append(request.form['selectCategory'])
+
+        
+    
+        if len(temporal)>0:
+            consulticas = SqlCons.Consultas()
+            dicionario = consulticas.convertirListaToDict(temporal)
+            datosBase = consulticas.consultarProductos(dicionario)
+            resultado= consulticas.convertirListaNormal(datosBase)
+            #print(dicionario, " -- >" , datosBase)
+            #print(" listas ",session['productos_temp'])
+            #print(resultado)
+            return render_template("consultarProductos.html",listado=resultado,dicionario1=dicionario)
+
+    if request.values.get('btn-submit') == 'agregar-carrito':
+        
+        if len(temporal)>0:
+            consulticas=SqlCons.Consultas()
+            dicionario = consulticas.convertirListaToDict(temporal)
+            datosBase = consulticas.consultarProductos(dicionario)
+            resultado= consulticas.convertirListaNormal(datosBase)
+             
+            final=consulticas.agregarAlCarrito(session['user'],request.values.get('id_vendor'),request.values.get('id_pro'),request.values.get('cantidad_producto'))
+            flash(final)
+            return render_template("consultarProductos.html",listado=resultado)
+    
+
 
     return render_template("consultarProductos.html")
+
+
+@app.route('/agregarAlCarrito',methods=['GET','POST'])
+@app.route('/agregarAlCarrito/<string:id_producto>')
+def agregarAlCarrito(id_producto):
+    print(id_producto)
 
 
 @app.route('/updateProducto/<string:id>',methods=['GET','POST'])
@@ -81,14 +119,15 @@ def EditarProductos():
             pass
     return render_template("EditarP.html",infoP=['datas1','data2'])
 
+## NO SE PARA QUE LO USARAN -- PSDT ANDUQUIA
 @app.route('/Verproduct',methods=['GET', 'POST'])
 def VerProductos():
     consulta= Consultas()
     consulta.detallePro('nombre')
     NombreP='Producto # 1'
     detalles=['Nombre1','ip_producto2','descripcion3','cod_barras4','catoria5']
-    
     return render_template("VerP.html",NombreP=NombreP,detalles=detalles)
+    
 
 @app.route('/product',methods=['GET', 'POST'])
 def productos():
