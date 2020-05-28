@@ -52,9 +52,9 @@ def registrarUsuario():
 
     return render_template("registro.html")
 
+#CONSULTAR Y AGREGAR PRODUCTO
 @app.route('/consultProductos/',methods=['GET','POST'])
 def consultarProductos():
-     
     resultado=list()
     if request.values.get('btn-submit')== 'buscar':
         temporal.clear()
@@ -64,9 +64,6 @@ def consultarProductos():
             temporal.append(request.form['selectSearch'])
         if request.form['selectCategory']:
             temporal.append(request.form['selectCategory'])
-
-        
-    
         if len(temporal)>0:
             consulticas = SqlCons.Consultas()
             dicionario = consulticas.convertirListaToDict(temporal)
@@ -94,11 +91,6 @@ def consultarProductos():
     return render_template("consultarProductos.html")
 
 
-@app.route('/agregarAlCarrito',methods=['GET','POST'])
-@app.route('/agregarAlCarrito/<string:id_producto>')
-def agregarAlCarrito(id_producto):
-    print(id_producto)
-
 
 @app.route('/updateProducto/<string:id>',methods=['GET','POST'])
 def updateProducto(id):
@@ -119,14 +111,7 @@ def EditarProductos():
             pass
     return render_template("EditarP.html",infoP=['datas1','data2'])
 
-## NO SE PARA QUE LO USARAN -- PSDT ANDUQUIA
-@app.route('/Verproduct',methods=['GET', 'POST'])
-def VerProductos():
-    consulta= Consultas()
-    consulta.detallePro('nombre')
-    NombreP='Producto # 1'
-    detalles=['Nombre1','ip_producto2','descripcion3','cod_barras4','catoria5']
-    return render_template("VerP.html",NombreP=NombreP,detalles=detalles)
+ 
     
 
 @app.route('/product',methods=['GET', 'POST'])
@@ -200,13 +185,17 @@ def addUsu():
     return render_template("registro.html")#--------------------------------------
 
 @app.route("/CarritoCompra", methods=['GET','POST'])
-def Carrito():
-    print('Inicio Carrito')
-    cabecera=['Vendedor','Nombre','Descripcion','Precio','Cantidad','Total Parcial']
-    datos=[['Vendedor1','Nombre1','Descripcion1','$$$$$$$','###3','Total Parcial'],
-            ['Vendedor2','Nombre2','Descripcion2','$$$$$$$','####','Total Parcial'],
-            ['Vendedor3','Nombre3','Descripcion3','$$$$$$$','####','Total Parcial']]
-    return render_template("shopingcar.html",cabecera=cabecera,datos0=datos)
+def CarritoCompra():
+    consulticas=SqlCons.Consultas()
+    resultado=consulticas.verCarrito(session['user'])
+    valores=consulticas.convertirLidiTOLista(resultado)
+
+    total=0.0
+    for i in valores:
+        total+=float(i[4])
+
+   
+    return render_template("carritoCompra.html",mi_carrito=valores,total=total)
 
 @app.route("/ses-Cls-hhm", methods=['GET','POST'])
 def dropsession():
