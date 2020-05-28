@@ -1,98 +1,3 @@
-#from flask import Flask
-#consejo esta url ponla como constante
-#url local: localhost/portal_ventas/php/api.php 
-
-#para inicio de sesión 
-#url: http://localhost/portal_ventas/php/api.php?op=inicio
-#POST:
-# cod_usuario: JSREYES
-# password: 27069811
-# retorno: {"server_response":[{"cod_usuario":"jsreyes","estado":"1","msj":"inicio de sesion correcto"}]}
-#------------------------------------------
-
-#para crear usuario
-#url: http://localhost/portal_ventas/php/api.php?fun=crear_usuario&op=insert
-#POST:
-# cod_usuario: DALEDRO
-# password: 12345678
-# tipo_id: 1
-# identificacion: la cédula de anduqui
-# nombre: Anduquia el somalí
-# dirección: calle 3 #56-12
-# tel_fijo: 3423052
-# tel_movil: 36255434
-# email: daledro@hotmail.com
-# eps: coomeva
-# foto: DALEDRO.jpg -> aunque de momento no
-#retorno: {"server_response":[{"estado":"1","cod_usuario":"DALEDRO","msj":"usuario creado"}]}
-#------------------------------------------
-
-#para un nuevo producto
-#url:http://localhost/portal_ventas/php/api.php?op=insert&fun=crear_producto
-# POST:
-# cod_producto=PR-4 
-# cod_usuario=jsreyes
-# descripcion=De Todito
-# cod_barras= de momento no
-# categoria=1
-# precio=2000 
-# peso=0.058 ->esto es en kilogramos
-# marca=fritolay 
-# info_tecnica=Pasabocas de maíz
-# unidad=1
-# modelo=2020
-#retorno: {"server_response":[{"estado":"1","cod_producto":"PR-4","msj":"el producto 'PR-4' ha sido agregado"}]}
-#------------------------------------------
-
-#para listar los productos de un vendedor
-#url: http://localhost/portal_ventas/php/api.php?op=select&fun=lista_productos
-# POST: 
-# cod_usuario=jsreyes 
-# los campos de abajo se envían si se actvan los filtros
-# cod_producto=PR-4
-# descripcion=De Todito
-# cod_barras= de momento no
-# categoria=1
-# marca=fritolay 
-#retorna: {"server_response":[[{"grabo":"jsreyes","nombre":"Sebasti\u00e1n
-# Reyes","cod_producto":"PR-1","descripcion":"Doritos","precio":"2000","peso":"0.058","marca":"fritolay"}],{"1":{"grabo":"jsreyes","nombre":"Sebasti\u00e1n
-# Reyes","cod_producto":"PR-2","descripcion":"Paquet\u00f3n
-# doritos","precio":"8000","peso":"0.326","marca":"fritolay"}},{"2":{"grabo":"jsreyes","nombre":"Sebasti\u00e1n
-# Reyes","cod_producto":"PR-3","descripcion":"choclitos de
-# limon","precio":"2000","peso":"0.058","marca":"fritolay"}},{"3":{"grabo":"jsreyes","nombre":"Sebasti\u00e1n
-# Reyes","cod_producto":"PR-4","descripcion":"De Todito","precio":"2000","peso":"0.058","marca":"fritolay"}}]}
-#------------------------------------------
-
-
-#para editar la informaciopn de un producto del vendedor
-#url: http://localhost/portal_ventas/php/api.php?op=update&fun=actualizar_producto
-# POST: 
-#-campos obligatorios para editar la información de un producto:
-# cod_usuario=jsreyes 
-# cod_producto=PR-4
-#-campos que se cambiaran el valor (claramente pueden si no se selecciona editar cierto campo, no se envía por POST):
-# descripcion=DeTododito criollo
-# cod_barras= de momento no
-# categoria=1
-# precio=2500 
-# peso=0.058 ->esto es en kilogramos
-# marca=fritolay 
-# info_tecnica=Pasabocas de maíz
-# unidad=1
-# modelo=2020
-#retorna: {"server_response":[{"estado":"1","cod_producto":"PR-4","msj":"el producto 'PR-4' ha sido actualizado"}]}
-# 
-#------------------------------------------
-
-#para eliminar un producto del vendedor
-#url: http://localhost/portal_ventas/php/api.php?op=delete&fun=eliminar_producto
-# POST: 
-#-campos obligatorios para editar la información de un producto:
-# cod_usuario=jsreyes 
-# cod_producto=PR-4
-#retorna: {"server_response":[{"estado":"1","cod_producto":"PR-4","msj":"el producto 'PR-4' ha sido eliminado"}]}
-# 
-#------------------------------------------
 import urllib3
 import json
 ##conexión con el URL
@@ -142,23 +47,62 @@ class Consultas():
         return obj
 
     # SENDING DATA POST URLLIB3
-    def registrarUsuario(self,cod_usuario,nombre,cedula,correo,password1,movil,direccion,eps,tipo_id)
-        http.request('POST', 'http://localhost:8080/assets',
-        headers={'Content-Type': 'application/json'},
-        body=({
-        "cod_usuario":cod_usuario,
-        "nombre": nombre,
-        "identificacion": cedula,
-        "correo": correo,
-        "password": password1,
-        "tel_movil":  movil,
-        "direccion": direccion,
-        "eps": eps,
-        "tipo_id": tipo_id
-        }))
+    def registrarUsuario(self,cod_usuario,nombre,cedula,rol,correo,password1,movil,direccion,eps,tipo_id):
+        resp = self.htp.request(
+        'POST',
+        self.url+'?fun=crear_usuario&op=insert',
+        fields={ 'cod_usuario':cod_usuario,
+        'nombre': nombre,
+        'identificacion': cedula,
+        'correo': correo,
+        'password': password1,
+        'tel_movil':  movil,
+        'direccion': direccion,
+        'eps': eps,
+        'tipo_id': tipo_id,
+        'rol':rol
+        })
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']
+        return obj[0]["msj"]
+    
+    def agregarAlCarrito(self,user,vendedor,producto,cantidad):
+        resp = self.htp.request(
+        'POST',
+        self.url+'?op=insert&fun=agregar_al_carrito',
+        fields={
+            'cod_usuario':user,
+            'vendedor': vendedor,
+            'producto': producto,
+            'cantidad':cantidad
+            })
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']   
+        
+        return obj[0]['msj']
 
+    def convertirStrToList(self,lista):
+        listicaFinal=list()
+        for i in lista:
+            listTemp=list()
+            numero = int(len(i))-1
+            resultado=""+i[1:numero]
+            mapeado = resultado.split(",")
+            for j in mapeado:
+                listTemp.append(j.replace("'",""))
+            listicaFinal.append(listTemp)
+        print(listicaFinal)
+        return listicaFinal
 
-
+  
+                 
+                 
+             
+            
+                 
+             
+             
+           
     def convertirListaToDict(self,lista):
         diccionario={lista[1]:lista[0]}
         return diccionario
@@ -176,15 +120,9 @@ class Consultas():
                 else:
                     resultado=self.valoresdicionario(lista[i][j])
                 lista_de_listas.append(resultado)
-
+        #print(lista_de_listas)
         return lista_de_listas
-         
-    def agregarusuario(self,
-        nombre,apellido,pass1,correo,movil,direccion,barrio,telefono,cedula):
-        # poner cnsulta php para agregar
-        salida=1# aca se graba la salida del php
-        return salida
-        pass
+ 
        
     def valoresdicionario(self,dicc):
         regist_temp=list()
@@ -194,11 +132,22 @@ class Consultas():
     
 
     def rol(self,user,passw):
-        rol=int()
-        rol=2
-        return rol
+        resp = self.htp.request(
+        'POST',
+        self.url+'?op=inicio',
+        fields={'cod_usuario': user,
+            'password': passw
+            })
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']   
+        
+        return obj[0]['rol']
 
 #prueba = Consultas()
+
+#prueba.prueba([['[jsreyes', ' Sebastián Reyes', ' PR-1', ' Doritos', ' 2000', ' 0.058', ' fritolay]', ' [jsreyes', ' Sebastián Reyes', ' PR-2', ' Paquetón doritos', ' 8000', ' 0.326', ' fritolay]']])
+
+
 #datos=[[{'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-1', 'descripcion': 'Doritos', 'precio': '2000', 'peso': '0.058', 'marca': 'fritolay'}], {'1': {'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-2', 'descripcion': 'Paquetón doritos', 'precio': '8000', 'peso': '0.326', 'marca': 'fritolay'}}, {'2': {'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-3', 'descripcion': 'gaseosa', 'precio': '3', 'peso': '150', 'marca': 'Cocacola'}}]
 #print(prueba.convertirListaNormal(datos))
 

@@ -6,7 +6,20 @@
     <link rel="stylesheet" href="../static/consultarProductos.css">
 </head>
 <div class="cabecera">
-    <form action="/consultProductos" method="POST" class="form-inline my-2 my-lg-0">
+
+    {{session['rol']}}
+
+    {% with mensaje=get_flashed_messages() %}
+            {% if mensaje %} 
+            {% for msj in mensaje %}
+                <p>  {{msj}}</p>
+                 
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+
+    <form action="/consultProductos/" method="POST" class="form-inline my-2 my-lg-0">
         <div class="sub">
             <div class="form-inline my-2 my-lg-0"> 
                 <label>Buscar</label>
@@ -39,7 +52,7 @@
             </select>
             </div>
         </div>
-        <input type="submit" class="btn btn-secondary" class="fadeIn fourth" value="Buscar">
+        <input type="submit" class="btn btn-secondary" class="fadeIn fourth" name="btn-submit" value="buscar">
 
     </form>
 
@@ -54,10 +67,10 @@
                 <th scope="col">PRECIO</th>
                 <th scope="col">PESO</th>
                 <th scope="col">MARCA</th>
-                <th scope="col">OPCION</th>
-                {% if session['rol'] == 1 %} <!-- Cliente -->
-                <th scope="col"> CANTIDAD COMPRA</th>
+                {% if session['rol'] == "1" %} <!-- Cliente -->
+                <th scope="col">CANTIDAD</th>
                 {% endif %}
+                <th scope="col">OPCION</th>
             </tr>
         </thead>
         <tbody>
@@ -68,21 +81,26 @@
                 <td scope="col"> {{ dato_producto.4 }} </td>
                 <td scope="col"> {{ dato_producto.5 }} </td>
                 <td scope="col"> {{ dato_producto.6 }} </td>
-
-
+                <form action="/consultProductos/" method="GET"> 
+                {% if session['rol'] =="1" %} <!-- Cliente Cantidad -->
                 <td class="opciones">
-                    {% if session['rol'] == 1 %} <!-- Cliente -->
-                    <a href="/updateProducto/{{dato_producto.2}}" class="btn_editar"> Agregar al carrito</a>
-                    <a href="" class="btn_detalle">  Detalle </a>
-                    
+                <input class="form-control mr-sm-2" type="search" name="cantidad_producto" placeholder="" aria-label="Search">
+                </td>
+                {% endif %}
+                <td class="opciones">
+                    {% if session['rol'] =="1" %} <!-- Cliente -->
+                    <input  type="hidden" name="id_vendor" value="{{dato_producto.0}}">
+                    <input  type="hidden" name="id_pro" value="{{dato_producto.2}}">
+                    <button type="submit"  name="btn-submit" value="agregar-carrito" class="btn btn-success"> Agregar </button>
+                    </form>
 
-                    {% elif session['rol'] == 2 %} <!-- Vendedor-->
+                    {% elif session['rol'] == "2" %} <!-- Vendedor-->
                     <a href="/updateProducto/{{dato_producto.2}}" class="btn_editar"> Editar</a>
                     <a href="" class="btn_detalle">  Anular </a>
                     <a href="" class="btn_detalle">  Detalle </a>
                     {% endif %}
                 </td>
-
+              
 
             </tr>
             {% endfor %}
