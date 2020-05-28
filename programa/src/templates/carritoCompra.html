@@ -1,13 +1,76 @@
-{% extends "base.html" %}
+{% extends "base.html" %} {% block content %}
+
+<head>
+    <link rel="stylesheet" href="../static/shopingcar.css">
+</head>
+
+{% with mensaje=get_flashed_messages() %}
+{% if mensaje %} 
+{% for msj in mensaje %}
+    <p>  {{msj}}</p>
+        
+{% endfor %}
+{% endif %}
+{% endwith %}
+
+<body>
+    <div class="cabe">
+        Carrito de compras
+    </div>
+    <div class="tabla">
+        <table class="table table-borderless">
+            <thead class="thead-dark">
+                <tr>
+                    <th scope="col"> VENDEDOR</th>
+                    <th scope="col">DESCRIPCION</th>
+                    <th scope="col">PRECIO</th>
+                    <th scope="col">CANTIDAD</th>
+                    <th scope="col">SUBTOTAL</th>
+                   
+                    <th scope="col">OPCION</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dato_producto in mi_carrito %}
+                <tr>
+                    <td scope="col"> {{ dato_producto.0 }} </td>
+                    <td scope="col"> {{ dato_producto.1 }} </td>
+                    <td scope="col"> {{ dato_producto.2 }} </td>
+                    <td scope="col"> {{ dato_producto.3 }} </td>
+                    <td scope="col"> {{ dato_producto.4 }} </td>    
+                    <td>
+                        <button class="btn btn-danger" name="editar" type="submit" value="borrar">Eliminar</button>            
+
+                    </td>  
+                
+                </tr>
+                {% endfor %}
+              
+            </tbody>
+        </table>
+
+        <div class="cabe1">
+            <div class="See-1">
+                <form action="#" method="POST">
+                    <button class="btn btn-outline-secondary" name="editar" type="submit" value="borrar">Segir Comprando</button>
+                    <form action="#" method="POST">
+                        <button class="btn btn-danger" name="editar" type="submit" value="borrar">Vaciar Carrito</button>
+                    </form>
+                </form>
 
 
-{% block content %}
-1 - derivado de la session
-2 - tabla de los productos agregados 
-3 - producto -> extends cu02  consultar producto
-4 - nombres de los productos , cantidad , precio 
-5 - el subtotal
-6 - boton -> comprar --> url_for('pedidos')
-7 - opciones , eliminar producto
 
+            </div>
+            <label>TOTAL</label>
+            <label> = </label>
+            <label>{{total}}</label>
+            <div class="See-2">
+                
+                <form action=" " method="POST">
+                    <button class="btn btn-success name=" type="submit " value="borrar ">Completar Pedido</button>
+                    
+                </form>
+            </div>
+        </div>
+</body>
 {% endblock %}

@@ -81,6 +81,19 @@ class Consultas():
         
         return obj[0]['msj']
 
+    def verCarrito(self,user):
+        resp = self.htp.request(
+        'POST',
+        self.url+'?op=select&fun=select_carrito',
+        fields={
+            'cod_usuario':user,
+            })
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']
+        
+        return obj
+
+
     def convertirStrToList(self,lista):
         listicaFinal=list()
         for i in lista:
@@ -97,7 +110,13 @@ class Consultas():
   
                  
                  
-             
+    def convertirLidiTOLista(self,lista):
+        temp_list=list()
+        if len(lista)>0:
+            for i in lista:
+                temp_aux=self.valoresdicionario(i)
+                temp_list.append(temp_aux)
+        return temp_list
             
                  
              
@@ -143,10 +162,11 @@ class Consultas():
         
         return obj[0]['rol']
 
-#prueba = Consultas()
-
+prueba = Consultas()
+#print(prueba.verCarrito('usuarioprueba1'))
 #prueba.prueba([['[jsreyes', ' Sebastián Reyes', ' PR-1', ' Doritos', ' 2000', ' 0.058', ' fritolay]', ' [jsreyes', ' Sebastián Reyes', ' PR-2', ' Paquetón doritos', ' 8000', ' 0.326', ' fritolay]']])
 
+#print(prueba.valoresdicionario({"vendedor":"Sebasti\u00e1n  Reyes","descripcion":"Doritos","precio":"2000","cantidad":"8","precio_parcial":"16000"}))
 
 #datos=[[{'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-1', 'descripcion': 'Doritos', 'precio': '2000', 'peso': '0.058', 'marca': 'fritolay'}], {'1': {'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-2', 'descripcion': 'Paquetón doritos', 'precio': '8000', 'peso': '0.326', 'marca': 'fritolay'}}, {'2': {'grabo': 'jsreyes', 'nombre': 'Sebastián Reyes', 'cod_producto': 'PR-3', 'descripcion': 'gaseosa', 'precio': '3', 'peso': '150', 'marca': 'Cocacola'}}]
 #print(prueba.convertirListaNormal(datos))
