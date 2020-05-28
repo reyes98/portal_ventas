@@ -169,7 +169,7 @@ def CarritoCompra():
 
     total=0.0
     for i in valores:
-        total+=float(i[4])
+        total+=float(i[6])
     
     if request.values.get('btn-submit') == 'regresar':
         return redirect(url_for('consultarProductos'))
