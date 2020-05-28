@@ -321,6 +321,34 @@ switch ($op) {
 	}
 	//---------------------------------------------------
 
+	//consulta pedido
+	if ($fun=="select_pedido") {
+		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
+		$cod_vendedor = isset($_POST['cod_vendedor'])?$_POST['cod_vendedor']:"NULL";
+
+		$response=array();
+		if ($cod_usuario!="NULL") {
+			if($resultado=ver_pedido($db_user, " f.cliente = '$cod_usuario' order by f.fecha_alta desc")){			
+				echo json_encode(array("server_response"=>$resultado));
+
+			}else{
+				echo json_encode(array("server_response"=>$response));
+			}
+		}
+		if ($cod_vendedor!="NULL") {
+			if($resultado=ver_pedido($db_user, " f.vendedor = '$cod_vendedor' order by f.fecha_alta desc")){			
+				echo json_encode(array("server_response"=>$resultado));
+
+			}else{
+				echo json_encode(array("server_response"=>$response));
+			}
+		}
+		
+		
+		exit();
+	}
+	//---------------------------------------------------
+
 	break;
 	//ejecuta update
 	case 'update':

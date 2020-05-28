@@ -30,4 +30,13 @@ function ver_carrito($db_user, $valores){
 	return $resultado;
 }
 
+function ver_pedido($db_user, $valores){
+	$campos = "p.cod_pedido, f.cliente, f.vendedor, f.direccion ";
+	$tablas = " pedidos as p
+	INNER JOIN facturas as f on p.cod_factura = f.cod_factura";
+	$resultado = $db_user->buscar_parm($campos, $tablas,$valores);
+	$db_user->desconectarse();
+	return $resultado;
+}
+
 ?>
