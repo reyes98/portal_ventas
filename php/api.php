@@ -306,6 +306,21 @@ switch ($op) {
 	}
 	//---------------------------------------------------
 
+	//consulta carrito
+	if ($fun=="select_carrito") {
+		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
+		$response=array();
+		if($resultado=ver_carrito($db_user, "c.cod_usuario = '$cod_usuario'")){			
+			echo json_encode(array("server_response"=>$resultado));
+					
+		}else{
+			echo json_encode(array("server_response"=>$response));
+		}
+		
+		exit();
+	}
+	//---------------------------------------------------
+
 	break;
 	//ejecuta update
 	case 'update':

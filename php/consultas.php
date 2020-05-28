@@ -20,10 +20,12 @@ function categorias($db_user){
 }
 
 function ver_carrito($db_user, $valores){
-	$campos = "p.cod_producto, p.descripcion, c.cantidad*p.peso as peso, c.cantidad*p.precio as precio, p.marca";
-	$tablas = " carrito as c 
-	INNER JOIN productos as p on p.cod_producto = c.cod_producto ";
-	$resultado = $db_user->buscar_parm("productos",$valores);
+	$campos = "v.nombre as vendedor, p.descripcion, p.precio, car.cantidad, (car.cantidad * p.precio) as precio_parcial";
+	$tablas = " carrito as car
+	INNER JOIN usuarios as c on c.cod_usuario = car.cod_usuario
+	INNER JOIN usuarios as v on car.vendedor = v.cod_usuario
+	INNER JOIN productos as p on p.cod_producto = car.cod_producto AND car.vendedor = p.grabo ";
+	$resultado = $db_user->buscar_parm($campos, $tablas,$valores);
 	$db_user->desconectarse();
 	return $resultado;
 }
