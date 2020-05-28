@@ -310,7 +310,7 @@ switch ($op) {
 	if ($fun=="select_carrito") {
 		$cod_usuario = isset($_POST['cod_usuario'])?$_POST['cod_usuario']:"NULL";
 		$response=array();
-		if($resultado=ver_carrito($db_user, "c.cod_usuario = '$cod_usuario'")){			
+		if($resultado=ver_carrito($db_user, " c.cod_usuario = '$cod_usuario' group by car.cod_producto")){			
 			echo json_encode(array("server_response"=>$resultado));
 					
 		}else{
