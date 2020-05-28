@@ -93,6 +93,80 @@ class Consultas():
         
         return obj
 
+    def vaciarCarrito(self,user):
+        resp = self.htp.request(
+        'POST',
+        self.url+'?op=delete&fun=vaciar_carrito',
+        fields={'cod_usuario': user,
+        })
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']   
+        
+        return obj[0]['msj']
+
+
+    def eliminarProductoCarrito(self,user,vendedor,id_producto):
+        resp = self.htp.request(
+        'POST',
+        self.url+'?op=delete&fun=eliminar_del_carrito',
+        fields={'cod_usuario': user,
+        'vendedor':vendedor,
+        'cod_producto':id_producto
+        })
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']   
+        
+        return obj[0]['msj']
+
+
+
+    def confirmarPedido(self,user_cliente,subtotal,valor_domicilio,arreglo):
+        total=subtotal+valor_domicilio
+
+    
+        resp = self.htp.request(
+        'POST',
+        self.url+'?op=insert&fun=nuevo_pedido',
+        fields={
+        'cliente': user_cliente,
+        'subtotal':str(subtotal),
+        'valor_domicilio':str(valor_domicilio),
+        'total':str(total),
+        'carrito':str(arreglo[0][0])
+        })
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']   
+        
+        return obj[0]['msj']
+
+    def crearProducto(self,cod_producto,cod_usuario,descripcion,categoria,precio,peso,marca,info_tecnica,unidad):
+        resp = self.htp.request(
+        'POST',
+        self.url+'?op=insert&fun=crear_producto',
+        fields={
+        'cod_producto': cod_producto,
+        'cod_usuario':cod_usuario,
+        'descripcion':descripcion,
+        'categoria':categoria,
+        'precio':precio,
+        'peso':peso,
+        'marca':marca,
+        'info_tecnica':info_tecnica,
+        'unidad':unidad
+        })
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']   
+        
+        return obj[0]['msj']
+
+
+
+    def getCategoria(self):
+        resp = self.htp.request('POST',self.url+'?op=select&fun=select_categoria')
+        datos= resp.data.decode('UTF-8')
+        obj = json.loads(datos)['server_response']   
+        return obj
+
 
     def convertirStrToList(self,lista):
         listicaFinal=list()
@@ -107,7 +181,8 @@ class Consultas():
         print(listicaFinal)
         return listicaFinal
 
-  
+    
+
                  
                  
     def convertirLidiTOLista(self,lista):
@@ -146,7 +221,7 @@ class Consultas():
     def valoresdicionario(self,dicc):
         regist_temp=list()
         for registro in dicc.values():
-            regist_temp.append(registro)
+            regist_temp.append(str(registro))
         return regist_temp
     
 
@@ -163,6 +238,8 @@ class Consultas():
         return obj[0]['rol']
 
 prueba = Consultas()
+
+print(prueba.getCategoria())
 #print(prueba.verCarrito('usuarioprueba1'))
 #prueba.prueba([['[jsreyes', ' Sebastián Reyes', ' PR-1', ' Doritos', ' 2000', ' 0.058', ' fritolay]', ' [jsreyes', ' Sebastián Reyes', ' PR-2', ' Paquetón doritos', ' 8000', ' 0.326', ' fritolay]']])
 

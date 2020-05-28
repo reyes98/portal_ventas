@@ -36,19 +36,23 @@ def home():
 @app.route('/registrarUsuario',methods=['GET','POST'])
 def registrarUsuario():
     if request.method == 'POST':
-       cod_usuario=request.form['cod_usuario']
-       nombre=request.form['nombre']
-       cedula=request.form['cedula']
-       correo=request.form['correo']
-       password1=request.form['pass1']
-       movil=request.form['movil']
-       direccion=request.form['direccion']
-       eps=request.form['eps']
-       rol=request.form['selectTipo']
-       tipo_id=1
-       consulticas=SqlCons.Consultas()
-       resultado=consulticas.registrarUsuario(cod_usuario,nombre,cedula,rol,correo,password1,movil,direccion,eps,tipo_id)
-       
+        cod_usuario=request.form['cod_usuario']
+        nombre=request.form['nombre']
+        cedula=request.form['cedula']
+        correo=request.form['correo']
+        password1=request.form['pass1']
+        movil=request.form['movil']
+        direccion=request.form['direccion']
+        eps=request.form['eps']
+        rol=request.form['selectTipo']
+        tipo_id=1
+        consulticas=SqlCons.Consultas()
+        if cod_usuario and nombre and cedula and correo and password1 and movil and direccion and eps:
+            resultado=consulticas.registrarUsuario(cod_usuario,nombre,cedula,rol,correo,password1,movil,direccion,eps,tipo_id)
+            flash("Usuario registrado")
+        else:
+            flash("Faltan campos por llenar")
+    
 
     return render_template("registro.html")
 
@@ -56,6 +60,11 @@ def registrarUsuario():
 @app.route('/consultProductos/',methods=['GET','POST'])
 def consultarProductos():
     resultado=list()
+    consulticas = SqlCons.Consultas()
+    categorias = consulticas.getCategoria()
+    transformar=consulticas.convertirLidiTOLista(categorias)
+
+
     if request.values.get('btn-submit')== 'buscar':
         temporal.clear()
         if request.form['buscador']:
@@ -65,14 +74,14 @@ def consultarProductos():
         if request.form['selectCategory']:
             temporal.append(request.form['selectCategory'])
         if len(temporal)>0:
-            consulticas = SqlCons.Consultas()
+           
             dicionario = consulticas.convertirListaToDict(temporal)
             datosBase = consulticas.consultarProductos(dicionario)
             resultado= consulticas.convertirListaNormal(datosBase)
             #print(dicionario, " -- >" , datosBase)
             #print(" listas ",session['productos_temp'])
             #print(resultado)
-            return render_template("consultarProductos.html",listado=resultado,dicionario1=dicionario)
+            return render_template("consultarProductos.html",categoria=transformar,listado=resultado,dicionario1=dicionario)
 
     if request.values.get('btn-submit') == 'agregar-carrito':
         
@@ -84,11 +93,11 @@ def consultarProductos():
              
             final=consulticas.agregarAlCarrito(session['user'],request.values.get('id_vendor'),request.values.get('id_pro'),request.values.get('cantidad_producto'))
             flash(final)
-            return render_template("consultarProductos.html",listado=resultado)
+            return render_template("consultarProductos.html",categoria=transformar,listado=resultado)
     
 
 
-    return render_template("consultarProductos.html")
+    return render_template("consultarProductos.html",categoria=transformar)
 
 
 
@@ -96,49 +105,17 @@ def consultarProductos():
 def updateProducto(id):
     return render_template("updateProducto.html",ides=id)
 
-
-
-@app.route('/carritoCompras',methods=['GET','POST'])
-def carritoCompras():
-    return render_template("carritoCompra.html")
-
-@app.route('/Editproduct',methods=['GET', 'POST'])
-def EditarProductos():
-
-    if request.method =="POST":
-        if request.values.get("editarP")!=None:
-            #si se unde el boton editar ...
-            pass
-    return render_template("EditarP.html",infoP=['datas1','data2'])
-
  
     
 
-@app.route('/product',methods=['GET', 'POST'])
-def productos():
-    if request.method =="POST":
-        if request.values.get("editar")!=None:
-            #EDITAR UN PRODUCTO PUNTUAL
-            idp=request.values.get("editar")
-
-            return redirect(url_for('EditarProductos'))
-        if request.values.get("ver")!=None:  
-            #VER LOS PRODUCTOS 
-            idp=request.values.get("ver")
-            return redirect(url_for('VerProductos'))
-
-
-        return render_template("productos.html")
-    cabecera=['','','']
-    columnas=[(1),(2),(3)]
-    return render_template("productos.html")
-
+ 
 @app.route('/adminUser',methods=['GET', 'POST'])
 def admin():
     if request.method =="POST":
          return render_template("productos.html")
     return render_template("admin.html")
     
+    ## NO SE USA 
 @app.route('/Registrar',methods=['GET', 'POST'])
 def addUsu():
     if request.method =="POST":     
@@ -193,9 +170,68 @@ def CarritoCompra():
     total=0.0
     for i in valores:
         total+=float(i[4])
+    
+    if request.values.get('btn-submit') == 'regresar':
+        return redirect(url_for('consultarProductos'))
+    elif request.values.get('btn-submit') == 'vaciar':
+        resul=consulticas.vaciarCarrito(session['user'])
+        flash(resul)
+        return render_template("carritoCompra.html")
+    elif request.values.get('msj_respuesta'):
+        flash(request.values.get('msj_respuesta'))
+        return render_template("carritoCompra.html",mi_carrito=valores,total=total)
 
-   
+    
+
     return render_template("carritoCompra.html",mi_carrito=valores,total=total)
+
+@app.route('/eliminarProducto/<string:cod_producto>/<string:cod_vendor>',methods=['GET','POST'])
+def eliminarProducto(cod_producto,cod_vendor):
+    consulticas= SqlCons.Consultas()
+    respuesta=consulticas.eliminarProductoCarrito(session['user'],cod_vendor,cod_producto)
+    return redirect(url_for('CarritoCompra',msj_respuesta=respuesta))
+
+@app.route('/confirmarPedido',methods=['GET','POST'])
+def confirmarPedido():
+    consulticas= SqlCons.Consultas()
+    resultado=consulticas.verCarrito(session['user'])
+    arreglo=consulticas.convertirLidiTOLista(resultado)
+   
+    dicionari=consulticas.convertirListaToDict(arreglo[0])
+    print(dicionari)
+    total=0.0
+    for i in arreglo:
+        total+=float(i[4])
+
+    #print(arreglo)
+    resultado_final=consulticas.confirmarPedido(session['user'],total,2500.0,arreglo)
+    #consulticas.vaciarCarrito(session['user'])
+
+    return redirect(url_for('CarritoCompra',msj_respuesta=resultado_final))
+
+@app.route('/registrarProducto')
+def registrarProducto():
+    consulticas =SqlCons.Consultas()
+    categorias = consulticas.getCategoria()
+    transformar=consulticas.convertirLidiTOLista(categorias)
+    if request.values.get('btn-submit') == 'Atras':
+        return redirect(url_for('consultarProductos'))
+    elif request.values.get('btn-submit') == 'Registrar':
+        cod_producto=request.values.get('cod_producto')
+        descripcion=request.values.get('descripcion')
+        precio=request.values.get('precio')
+        peso=request.values.get('peso')
+        marca=request.values.get('marca')
+        info_tecnica=request.values.get('info_tecnica')
+        
+        unidad=request.values.get('unidad')
+        selectTipo=request.values.get('selectTipo')
+
+        resultado=consulticas.crearProducto(cod_producto,session['user'] ,descripcion,selectTipo,precio,peso,marca,info_tecnica,unidad)
+        flash(resultado)
+
+    return render_template("agregar_producto.html",categoria=transformar)
+
 
 @app.route("/ses-Cls-hhm", methods=['GET','POST'])
 def dropsession():

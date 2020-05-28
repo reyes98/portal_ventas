@@ -1,0 +1,58 @@
+<link href="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+<link rel="stylesheet" href="../static/login.css">
+
+<!------ Include the above in your HEAD tag ---------->
+
+<div class="wrapper fadeInDown">
+    <div id="formContent">
+        <!-- Tabs Titles -->
+
+        <!-- Icon -->
+        <div class="fadeIn first">
+        
+            {% with mensaje=get_flashed_messages() %}
+            {% if mensaje %} 
+            {% for msj in mensaje %}
+                <p>  {{msj}}</p>
+                 
+            {% endfor %}
+            {% endif %}
+            {% endwith %}
+
+        </div>
+
+        <!-- Login Form -->
+        <form action="/registrarProducto" method="GET">
+
+            <label for="">{{mensaje}}</label>
+            <input type="text" id="login" minlength="3" maxlength="29" class="fadeIn second" name="cod_producto" placeholder="Codigo del producto">
+            <input type="text" id="login" minlength="3" maxlength="29" class="fadeIn second" name="descripcion" placeholder="Nombre del producto">
+            <input type="text" id="login" minlength="3" maxlength="29" class="fadeIn second" name="precio" placeholder="Precio ">
+            <input type="text" id="login" minlength="3" maxlength="29" class="fadeIn second" name="peso" placeholder="Peso">
+            <input type="text" id="login" minlength="3" maxlength="29" class="fadeIn second" name="marca" placeholder="Marca">
+            <input type="text" id="login" minlength="3" maxlength="29" class="fadeIn second" name="info_tecnica" placeholder="Comentario">
+            <input type="text" id="login" minlength="1" maxlength="29" class="fadeIn second" name="unidad" placeholder="Unidad">
+            <div id="wrapper fadeInDown">
+
+            <label> Categoria del producto </label>
+            <select class="custom-select custom-select-lg mb-3" name="selectTipo" >   
+                {% for i in categoria %}
+                <option value="{{i.0}}" > {{i.1}}</option> 
+                {% endfor %}
+            </select>
+            </div>
+
+            <input type="submit" class="fadeIn fourth" name="btn-submit" value="Atras">
+            <input type="submit" class="fadeIn fourth" name="btn-submit" value="Registrar">
+        </form>
+
+        <!-- Remind Passowrd -->
+        <div id="formFooter">
+            <!--<a class="underlineHover" href="#">Forgot Password?</a>-->
+        </div>
+
+    </div>
+</div>

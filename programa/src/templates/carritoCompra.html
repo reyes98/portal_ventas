@@ -33,13 +33,13 @@
             <tbody>
                 {% for dato_producto in mi_carrito %}
                 <tr>
-                    <td scope="col"> {{ dato_producto.0 }} </td>
-                    <td scope="col"> {{ dato_producto.1 }} </td>
                     <td scope="col"> {{ dato_producto.2 }} </td>
                     <td scope="col"> {{ dato_producto.3 }} </td>
-                    <td scope="col"> {{ dato_producto.4 }} </td>    
+                    <td scope="col"> {{ dato_producto.4 }} </td>
+                    <td scope="col"> {{ dato_producto.5 }} </td>
+                    <td scope="col"> {{ dato_producto.6 }} </td>    
                     <td>
-                        <button class="btn btn-danger" name="editar" type="submit" value="borrar">Eliminar</button>            
+                        <a class="btn btn-outline-danger" name="editar" href="/eliminarProducto/{{dato_producto.0}}/{{dato_producto.1}}" type="button" value="borrar">Eliminar</button>            
 
                     </td>  
                 
@@ -51,10 +51,10 @@
 
         <div class="cabe1">
             <div class="See-1">
-                <form action="#" method="POST">
-                    <button class="btn btn-outline-secondary" name="editar" type="submit" value="borrar">Segir Comprando</button>
+                <form action="#" method="GET">
+                    <button class="btn btn-outline-secondary" name="btn-submit" type="submit" value="regresar">Seguir Comprando</button>
                     <form action="#" method="POST">
-                        <button class="btn btn-danger" name="editar" type="submit" value="borrar">Vaciar Carrito</button>
+                        <button class="btn btn-danger" name="btn-submit" type="submit" value="vaciar">Vaciar Carrito</button>
                     </form>
                 </form>
 
@@ -66,7 +66,7 @@
             <label>{{total}}</label>
             <div class="See-2">
                 
-                <form action=" " method="POST">
+                <form action="/confirmarPedido" method="POST">
                     <button class="btn btn-success name=" type="submit " value="borrar ">Completar Pedido</button>
                     
                 </form>

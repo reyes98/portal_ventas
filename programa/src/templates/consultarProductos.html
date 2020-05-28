@@ -46,14 +46,19 @@
             <div class="form-group">
             <label for="exampleFormControlSelect1">Categoria</label>
             <select class="form-control" id="exampleFormControlSelect1" name="selectCategory">
-            <option value="1" > 1</option> 
-            <option value="2" > 2</option>
-            <option value="3" > 3</option>
+            {% for i in categoria %}
+            <option value="{{i.0}}"> {{i.1}}</option> 
+            {% endfor %} 
             </select>
             </div>
         </div>
-        <input type="submit" class="btn btn-secondary" class="fadeIn fourth" name="btn-submit" value="buscar">
-
+        <input type="submit" class="btn btn-outline-dark" class="fadeIn fourth" name="btn-submit" value="buscar">
+        <div class="sub1">
+            {% if session['rol'] == "2" %} <!-- Vendedor -->
+            <a type="submit" class="btn btn-outline-primary" href="/registrarProducto" value="agregar">Agregar producto</a>
+            {% endif %}
+        </div>
+        
     </form>
 
 </div>
@@ -95,9 +100,9 @@
                     </form>
 
                     {% elif session['rol'] == "2" %} <!-- Vendedor-->
-                    <a href="/updateProducto/{{dato_producto.2}}" class="btn_editar"> Editar</a>
-                    <a href="" class="btn_detalle">  Anular </a>
-                    <a href="" class="btn_detalle">  Detalle </a>
+                    <a href="/updateProducto/{{dato_producto.2}}" class="btn btn-warning" class="btn_editar"> Editar</a>
+                    <a href="" class="btn btn-danger"> Anular </a>
+            
                     {% endif %}
                 </td>
               
